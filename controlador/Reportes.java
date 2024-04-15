@@ -14,16 +14,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class Reportes {
     public void reportesClientes() throws DocumentException, BadElementException{
+        String st = obtenerDiaActual();
         FileOutputStream archivo = null;
         try{
             Document documento = new Document();
-            String nombreArchivo = "Reporte_Clientes_" +  + ".pdf";
+            String nombreArchivo = "Reporte_Clientes_" + st  + ".pdf";
             
             File file = new File("src/pdf/"+nombreArchivo);
             archivo = new FileOutputStream(file);
@@ -65,6 +67,22 @@ public class Reportes {
         }
         
     }
+    
+    
+    public String obtenerDiaActual(){
+        String st = "";
+        LocalDateTime ahora = LocalDateTime.now();
+        int ano = ahora.getYear();
+        int mes = ahora.getMonthValue();
+        int dia = ahora.getDayOfMonth();
+        int hora = ahora.getHour();
+        int minuto = ahora.getMinute();
+        int segundo = ahora.getSecond();
+        
+        st = dia + "/" + mes + "/" + ano + "||" + hora + ":" + minuto + ":" + segundo;
+        return st;
+    }
+    
     
     public void reportesTransacciones(){
         

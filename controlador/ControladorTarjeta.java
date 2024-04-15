@@ -168,7 +168,23 @@ public class ControladorTarjeta {
     //comprobar que la tarjeta está activa
     public boolean comprobarEstado(int idTarjeta) {
         boolean respuesta = false;
-
+        String sql = ""; 
+        Statement st;
+        try {
+            Connection cn = null;
+            try {
+                cn = Conexion.conectar();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ControladorTarjeta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                respuesta = true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al consultar usuario: " + e);
+        }
         return respuesta;
 
     }

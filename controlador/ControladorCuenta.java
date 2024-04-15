@@ -6,10 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Cuenta;
-
 
 public class ControladorCuenta {
 
@@ -131,6 +131,10 @@ public class ControladorCuenta {
     public int crearNumeroCuenta() {
         int numCuenta = 0;
         int longitud = 10;
+        Random rnd = new Random();
+        for (int i = 1; i <= longitud; i++) {
+            System.out.println(rnd.nextInt());
+        }
 
         return numCuenta;
 
@@ -158,6 +162,10 @@ public class ControladorCuenta {
             System.out.println("Error al consultar numero de cuenta: " + e);
         }
         return respuesta;
+    }
+    
+    public void main(String args[]){
+        
     }
 
 }

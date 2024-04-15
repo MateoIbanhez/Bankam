@@ -5,6 +5,7 @@ public class Usuario {
     private String nombre;
     private String primerApellido;
     private String segundoApellido;
+    private String password;
     private String fechaNacimiento;
     private String numeroTel;
     private String fechaCreacion;
@@ -12,11 +13,12 @@ public class Usuario {
     private String estado;
     
 
-    public Usuario(int idUsuario, String nombre, String primerApellido, String segundoApellido, String fechaNacimiento, String numeroTel, String fechaCreacion, String genero, String estado) {
+    public Usuario(int idUsuario, String nombre, String primerApellido, String segundoApellido, String password, String fechaNacimiento, String numeroTel, String fechaCreacion, String genero, String estado) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.primerApellido = primerApellido;
         this.segundoApellido = segundoApellido;
+        this.password = password;
         this.fechaNacimiento = fechaNacimiento;
         this.numeroTel = numeroTel;
         this.fechaCreacion = fechaCreacion;
@@ -28,6 +30,7 @@ public class Usuario {
         this.nombre = "";
         this.primerApellido = "";
         this.segundoApellido = "";
+        this.password = "";
         this.fechaNacimiento = "";
         this.numeroTel = "";
         this.fechaCreacion = "";
@@ -66,6 +69,16 @@ public class Usuario {
     public void setSegundoApellido(String segundoApellido) {
         this.segundoApellido = segundoApellido;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    
 
     public String getFechaNacimiento() {
         return fechaNacimiento;
