@@ -2,16 +2,19 @@ package conexion;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import com.mysql.cj.jdbc.Driver;
+
 
 public class Conexion {
+    private static final String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
     public static Connection conectar() throws ClassNotFoundException {
         String username = "root";
         String password = "";
-        String url = "jdbc:mysql://localhost:3306/db_banco";
+        String url = "jdbc:mysql://localhost:3306/bd_banco";
         Connection cn = null;
         try {
             
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(DRIVER_CLASS);
             cn=(Connection)DriverManager.getConnection(url,username,password);
             
             return (Connection) cn;

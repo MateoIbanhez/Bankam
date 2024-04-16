@@ -1,41 +1,60 @@
 package modelo;
 
 public class Usuario {
+
     private int idUsuario;
     private String nombre;
     private String primerApellido;
     private String segundoApellido;
     private String password;
+    private String documentoIdentificacion;
     private String fechaNacimiento;
     private String numeroTel;
+    private String correo;
+    private String calle;
+    private int numeroCalle;
+    private int piso;
+    private String letra;
     private String fechaCreacion;
-    private String genero;
-    private String estado;
-    
+    private int genero;
+    private int estado;
 
-    public Usuario(int idUsuario, String nombre, String primerApellido, String segundoApellido, String password, String fechaNacimiento, String numeroTel, String fechaCreacion, String genero, String estado) {
+    public Usuario(int idUsuario, String nombre, String primerApellido, String segundoApellido, String password, String documentoIdentificacion, String fechaNacimiento, String numeroTel, String correo, String calle, int numeroCalle, int piso,String letra, String fechaCreacion, int genero, int estado) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.primerApellido = primerApellido;
         this.segundoApellido = segundoApellido;
         this.password = password;
+        this.documentoIdentificacion  = documentoIdentificacion ;
         this.fechaNacimiento = fechaNacimiento;
         this.numeroTel = numeroTel;
+        this.correo = correo;
+        this.calle = calle;
+        this.numeroCalle = numeroCalle;
+        this.piso = piso;
+        this.letra = letra;
         this.fechaCreacion = fechaCreacion;
         this.genero = genero;
         this.estado = estado;
     }
+
     public Usuario() {
         this.idUsuario = 0;
         this.nombre = "";
         this.primerApellido = "";
         this.segundoApellido = "";
         this.password = "";
+        this.documentoIdentificacion = "";
         this.fechaNacimiento = "";
         this.numeroTel = "";
+        this.correo = "";
+        this.calle = "";
+        this.numeroCalle = 0;
+        this.piso = 0;
+        this.letra = "";
         this.fechaCreacion = "";
-        this.genero = "";
-        this.estado = "";
+        this.genero = 0;
+        this.estado = 0;
     }
 
     public int getIdUsuario() {
@@ -77,7 +96,15 @@ public class Usuario {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
+    public String getDocumentoIdentificacion() {
+        return documentoIdentificacion;
+    }
+
+    public void setDocumentoIdentificacion(String documentoIdentificacion) {
+        this.documentoIdentificacion = documentoIdentificacion;
+    }
+
     
 
     public String getFechaNacimiento() {
@@ -96,6 +123,49 @@ public class Usuario {
         this.numeroTel = numeroTel;
     }
 
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getCalle() {
+        return calle;
+    }
+
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+    public int getNumeroCalle() {
+        return numeroCalle;
+    }
+
+    public void setNumeroCalle(int numeroCalle) {
+        this.numeroCalle = numeroCalle;
+    }
+
+    public int getPiso() {
+        return piso;
+    }
+
+    public void setPiso(int piso) {
+        this.piso = piso;
+    }
+
+    public String getLetra() {
+        return letra;
+    }
+
+    public void setLetra(String letra) {
+        this.letra = letra;
+    }
+    
+    
+
+    
     public String getFechaCreacion() {
         return fechaCreacion;
     }
@@ -104,20 +174,20 @@ public class Usuario {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public String getGenero() {
+    public int getGenero() {
         return genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(int genero) {
         this.genero = genero;
     }
 
-    public String getEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
-    
+
 }

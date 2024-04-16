@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Cuenta;
@@ -97,7 +98,7 @@ public class ControladorCuenta {
             }
             return respuesta;
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorCuenta.class.getName()).log(Level.SEVERE, null, ex);
         }
         return respuesta;
     }
@@ -165,6 +166,7 @@ public class ControladorCuenta {
     }
     
     public void main(String args[]){
+        
         
     }
 

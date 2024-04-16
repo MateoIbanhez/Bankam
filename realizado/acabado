@@ -1,0 +1,5 @@
+
+controlador usuario -----> registrar usuario()
+                    ----->verificar si existe()
+
+                                                    queda por realizar: verificar datos del date, 
