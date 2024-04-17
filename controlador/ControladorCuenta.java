@@ -1,6 +1,7 @@
 package controlador;
 
 import conexion.Conexion;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,14 +15,17 @@ import modelo.Cuenta;
 
 public class ControladorCuenta {
 
+    
+
     //metodo para abrir una cuenta desde cero
-    public boolean abrirCuenta(Cuenta objeto) {
+    public boolean abrirCuenta(Cuenta objeto, int idUsuario) {
         boolean respuesta = false;
+        String sql = "insert into tb_cuentas (idTitular, codPais, digitoControlPais, entidad, oficina, digitoControlCuenta, numCuenta, saldo, tipoMoneda, idTarjeta) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         try {
 
             Connection cn = Conexion.conectar();
             try {
-                PreparedStatement consulta = cn.prepareStatement("",
+                PreparedStatement consulta = cn.prepareStatement(sql,
                         Statement.RETURN_GENERATED_KEYS);
                 consulta.setInt(1, objeto.getIdCuenta());
 
@@ -165,9 +169,28 @@ public class ControladorCuenta {
         return respuesta;
     }
     
-    public void main(String args[]){
+ 
+    
+    public static void main(String args[]){
+        int iban = calcularIBAN();
+        System.out.println(iban);
+        
+    }
+
+    private static int calcularIBAN() {
+        long numCuenta = 1234567812345678l;
+        int aux = 142800;
+        
+        int codEntidad = 1533;
+        String numeroCompuesto = String.valueOf(codEntidad) + String.valueOf(numCuenta) + String.valueOf(aux);
+        BigInteger numeroC = new BigInteger(numeroCompuesto);
+        BigInteger noventaYSiete = new BigInteger("97");
+        numeroC = numeroC.mod(noventaYSiete);
+        int dcP = numeroC.intValue();
+        dcP = 98 - dcP;
         
         
+        return dcP;
     }
 
 }
