@@ -6,7 +6,7 @@ public class Usuario {
     private String nombre;
     private String primerApellido;
     private String segundoApellido;
-    private String password;
+    private byte[] password;
     private String documentoIdentificacion;
     private String fechaNacimiento;
     private String numeroTel;
@@ -19,7 +19,7 @@ public class Usuario {
     private int genero;
     private int estado;
 
-    public Usuario(int idUsuario, String nombre, String primerApellido, String segundoApellido, String password, String documentoIdentificacion, String fechaNacimiento, String numeroTel, String correo, String calle, int numeroCalle, int piso,String letra, String fechaCreacion, int genero, int estado) {
+    public Usuario(int idUsuario, String nombre, String primerApellido, String segundoApellido, byte[] password, String documentoIdentificacion, String fechaNacimiento, String numeroTel, String correo, String calle, int numeroCalle, int piso,String letra, String fechaCreacion, int genero, int estado) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.primerApellido = primerApellido;
@@ -43,7 +43,7 @@ public class Usuario {
         this.nombre = "";
         this.primerApellido = "";
         this.segundoApellido = "";
-        this.password = "";
+        byte[] password = this.password;
         this.documentoIdentificacion = "";
         this.fechaNacimiento = "";
         this.numeroTel = "";
@@ -89,11 +89,11 @@ public class Usuario {
         this.segundoApellido = segundoApellido;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(byte[] password) {
         this.password = password;
     }
 

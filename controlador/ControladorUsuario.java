@@ -1,6 +1,7 @@
 package controlador;
 
 import conexion.Conexion;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.lang.String;
+import java.util.ArrayList;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
@@ -24,138 +27,212 @@ public class ControladorUsuario {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        int op;
         try {
-            String nombre;
-            String primerApe;
-            String segundoApe;
+
             String password;
             String docIdent;
-            int diaNac;
-            int mesNac;
-            int anoNac;
-            String tel;
-            String correo;
-            String calle;
-            int numCalle;
-            int piso;
-            String letra;
-            String genero;
-            do {
-                System.out.println("Introduce un nombre: ");
-                nombre = sc.nextLine();
-                System.out.println("Introduce un primer apellido: ");
-                primerApe = sc.nextLine();
-                System.out.println("Introduce un segundo apellido: ");
-                segundoApe = sc.nextLine();
-                System.out.println("Introduce una password: ");
-                password = sc.nextLine();
+
+            System.out.println("Elija una opcion: \n "
+                    + "1- registrar...\n"
+                    + "2- login..."
+                    + "3 - actualizar datos"
+                    + "4 - eliminar usuario");
+            op = sc.nextInt();
+            if (op == 1) {
+                String nombre;
+                String primerApe;
+                String segundoApe;
+                int diaNac;
+                int mesNac;
+                int anoNac;
+                String tel;
+                String correo;
+                String calle;
+                int numCalle;
+                int piso;
+                String letra;
+                String genero;
+                do {
+
+                    System.out.println("Introduce un nombre: ");
+                    nombre = sc.nextLine();
+                    System.out.println("Introduce un primer apellido: ");
+                    primerApe = sc.nextLine();
+                    System.out.println("Introduce un segundo apellido: ");
+                    segundoApe = sc.nextLine();
+                    System.out.println("Introduce una password: ");
+                    password = sc.nextLine();
+                    System.out.println("Introduce tu documentoIdentificacion: ");
+                    docIdent = sc.nextLine();
+                    System.out.println("Introduce tu dia de nacimiento: ");
+                    diaNac = sc.nextInt();
+                    System.out.println("Introduce tu mes de nacimiento: ");
+                    mesNac = sc.nextInt();
+                    System.out.println("Introduce tu año de nacimiento: ");
+                    anoNac = sc.nextInt();
+                    System.out.println("Introduce un telefono: ");
+                    tel = sc.nextLine();
+                    System.out.println("Introduce un telefono: ");
+                    tel = sc.nextLine();
+                    System.out.println("Introduce un correo: ");
+                    correo = sc.nextLine();
+                    System.out.println("Introduce una calle: ");
+                    calle = sc.nextLine();
+                    System.out.println("Introduce un numero de calle: ");
+                    numCalle = sc.nextInt();
+                    System.out.println("Introduce un piso: ");
+                    piso = sc.nextInt();
+                    System.out.println("Introduce una letra: ");
+                    letra = sc.nextLine();
+                    System.out.println("Introduce un genero(H/M): ");
+                    genero = sc.nextLine();
+
+                    String fechaNac = "";
+
+                    //hacemos algunas validaciones 
+                    //validarEmail
+                    if (validarEmail(correo)) {
+                        System.out.println("Validacion de email correcta");
+                    } else {
+                        System.out.println("Validacion de email INCORRECTA");
+                        correo = "";
+                    }
+                    //validar documento de identidad (DNI)
+                    if (validarDocumentoIdentificacion(docIdent)) {
+                        System.out.println("Validacion de documento de identidad correcta");
+
+                    } else {
+                        System.out.println("Validacion de documento de identidad INCORRECTA");
+                        System.exit(1);
+                    }
+                    //validar telefono
+                    if (validarTelefono(tel)) {
+                        System.out.println("Validacion de telefono correcta");
+
+                    } else {
+                        System.out.println("Validacion de telefono INCORRECTA");
+                        System.exit(1);
+                    }
+                    //validar genero
+                    int generoInt = validarGenero(genero);
+                    System.out.println(genero + " _ " + generoInt + "\n");
+
+                    System.out.println(generoInt + " genero \n");
+
+                    if (generoInt == 0) {
+                        System.out.println("Hubo un error al asignar un genero");
+                    } else {
+                        System.out.println(generoInt + "\n");
+                    }
+                    //validar la letra, si hay
+                    if (!validarLetra(letra)) {
+                        letra = "";
+                    }
+                    System.out.println(diaNac + "\t");
+                    System.out.println(mesNac + "\t");
+                    System.out.println(anoNac + "\n");
+                    //validar fecha de nacimiento
+                    fechaNac = validarFecha(diaNac, mesNac, anoNac);
+
+                    fechaNac = anoNac + "/" + mesNac + "/" + diaNac;
+
+                    System.out.println(fechaNac + "\n");
+                    //obtenemos la fecha actual para insertar en la fecha de creacion
+                    String fechaCreacion = obtenerFechaActual();
+                    System.out.println(fechaCreacion + "\n");
+                    //encriptar la contraseña
+                    byte[] passwordEncriptada = cifrarPass(password);
+                    System.out.println(passwordEncriptada + "\n");
+
+                    Usuario usu = new Usuario();
+                    usu.setNombre(nombre);
+                    usu.setPrimerApellido(primerApe);
+                    usu.setSegundoApellido(segundoApe);
+                    usu.setPassword(passwordEncriptada);
+                    usu.setDocumentoIdentificacion(docIdent);
+                    usu.setFechaNacimiento(fechaNac);
+                    usu.setNumeroTel(tel);
+                    usu.setCorreo(correo);
+                    usu.setCalle(calle);
+                    usu.setNumeroCalle(numCalle);
+                    usu.setPiso(piso);
+                    usu.setLetra(letra);
+                    usu.setFechaCreacion(fechaCreacion);
+                    usu.setGenero(generoInt);
+                    usu.setEstado(1);
+                    //comprobamos que el usuario que queremos registrar no existe en la base de datos
+                    if (existeUsuario(docIdent)) {
+                        System.out.println("Intentado ver si el usuario existe...");
+                        JOptionPane.showMessageDialog(null, "El usuario introducido ya existe en la base de datos");
+                    } else {
+                        System.out.println("El usuario todavia no existe...vamos a crearlo...");
+                        registrarUsuario(usu);
+                    }
+
+                } while (nombre.isEmpty() || primerApe.isEmpty() || genero.isEmpty() || segundoApe.isEmpty() || password.isEmpty() || diaNac == 0 || mesNac == 0 || anoNac == 0
+                        || tel.isEmpty() || correo.isEmpty() || calle.isEmpty() || numCalle == 0);
+            } else if (op == 2) {
                 System.out.println("Introduce tu documentoIdentificacion: ");
                 docIdent = sc.nextLine();
-                System.out.println("Introduce tu dia de nacimiento: ");
-                diaNac = sc.nextInt();
-                System.out.println("Introduce tu mes de nacimiento: ");
-                mesNac = sc.nextInt();
-                System.out.println("Introduce tu año de nacimiento: ");
-                anoNac = sc.nextInt();
+                System.out.println("Introduce tu documentoIdentificacion: ");
+                docIdent = sc.nextLine();
+                System.out.println("Introduce una password: ");
+                password = sc.nextLine();
+
+                Usuario usu = new Usuario();
+                usu.setDocumentoIdentificacion(docIdent);
+                int usuId = loginUser(usu.getDocumentoIdentificacion(), password);
+                if (usuId == 0) {
+                    //enviar datos
+                    System.out.println("contraseña o el documento son incorrectos");
+                } else {
+                    System.out.println("Contraseña y documento correcto");
+                    Usuario objUsu = new Usuario();
+                    objUsu = obtenerDatos(docIdent);
+                    objUsu.getIdUsuario();
+                    objUsu.getNombre();
+                    //enviar al home, junto con el id
+                }
+            } else if (op == 3) {
+                System.out.println("Elige el usuario que actualizar (documento) + contraseña:");
+                System.out.println("documento");
+                docIdent = sc.nextLine();
+                System.out.println("documento");
+                docIdent = sc.nextLine();
+                System.out.println("contra");
+                password = sc.nextLine();
+                Usuario usuario = new Usuario();
+                usuario = obtenerDatos(docIdent);
+
+                
                 System.out.println("Introduce un telefono: ");
-                tel = sc.nextLine();
-                System.out.println("Introduce un telefono: ");
-                tel = sc.nextLine();
+                String tel = sc.nextLine();
                 System.out.println("Introduce un correo: ");
-                correo = sc.nextLine();
+                String correo = sc.nextLine();
                 System.out.println("Introduce una calle: ");
-                calle = sc.nextLine();
+                String calle = sc.nextLine();
                 System.out.println("Introduce un numero de calle: ");
-                numCalle = sc.nextInt();
+                int numCalle = sc.nextInt();
                 System.out.println("Introduce un piso: ");
-                piso = sc.nextInt();
+                int piso = sc.nextInt();
+                System.out.println("Introduce una letra: ");
+                String letra = sc.nextLine();
                 System.out.println("Introduce una letra: ");
                 letra = sc.nextLine();
-                System.out.println("Introduce un genero(H/M): ");
-                genero = sc.nextLine();
-            } while (nombre.isEmpty() || primerApe.isEmpty() || genero.isEmpty() || segundoApe.isEmpty() || password.isEmpty() || diaNac == 0 || mesNac == 0 || anoNac == 0
-                    || tel.isEmpty() || correo.isEmpty() || calle.isEmpty() || numCalle == 0);
-
-            String fechaNac = "";
-
-            //hacemos algunas validaciones 
-            //validarEmail
-            if (validarEmail(correo)) {
-                System.out.println("Validacion de email correcta");
-            } else {
-                System.out.println("Validacion de email INCORRECTA");
-                correo = "";
-            }
-            //validar documento de identidad (DNI)
-            if (validarDocumentoIdentificacion(docIdent)) {
-                System.out.println("Validacion de documento de identidad correcta");
-
-            } else {
-                System.out.println("Validacion de documento de identidad INCORRECTA");
-                System.exit(1);
-            }
-            //validar telefono
-            if (validarTelefono(tel)) {
-                System.out.println("Validacion de telefono correcta");
-
-            } else {
-                System.out.println("Validacion de telefono INCORRECTA");
-                System.exit(1);
-            }
-            //validar genero
-            int generoInt = validarGenero(genero);
-            System.out.println(genero + " _ " + generoInt +"\n");
-            
-            System.out.println(generoInt  + " genero \n");
-            
-            if (generoInt == 0) {
-                System.out.println("Hubo un error al asignar un genero");
-            } else {
-                System.out.println(generoInt + "\n");
-            }
-            //validar la letra, si hay
-            if (!validarLetra(letra)) {
-                letra = "";
-            }
-            System.out.println(diaNac + "\t");
-            System.out.println(mesNac + "\t");
-            System.out.println(anoNac + "\n");
-            //validar fecha de nacimiento
-            fechaNac = validarFecha(diaNac, mesNac, anoNac);
-            
-            fechaNac = anoNac+"/"+ mesNac + "/" + diaNac;
-            
-            System.out.println(fechaNac + "\n");
-            //obtenemos la fecha actual para insertar en la fecha de creacion
-            String fechaCreacion = obtenerFechaActual();
-            System.out.println(fechaCreacion + "\n");
-            //encriptar la contraseña
-            //byte[] passwordEncriptada = cifrarPass(password);
-            //System.out.println(passwordEncriptada + "\n");
-
-            Usuario usu = new Usuario();
-            usu.setNombre(nombre);
-            usu.setPrimerApellido(primerApe);
-            usu.setSegundoApellido(segundoApe);
-            usu.setPassword(password);
-            usu.setDocumentoIdentificacion(docIdent);
-            usu.setFechaNacimiento(fechaNac);
-            usu.setNumeroTel(tel);
-            usu.setCorreo(correo);
-            usu.setCalle(calle);
-            usu.setNumeroCalle(numCalle);
-            usu.setPiso(piso);
-            usu.setLetra(letra);
-            usu.setFechaCreacion(fechaCreacion);
-            usu.setGenero(generoInt);
-            usu.setEstado(1);
-            //comprobamos que el usuario que queremos registrar no existe en la base de datos
-            if (existeUsuario(docIdent)) {
-                System.out.println("Intentado ver si el usuario existe...");
-                JOptionPane.showMessageDialog(null, "El usuario introducido ya existe en la base de datos");
-            } else {
-                System.out.println("El usuario todavia no existe...vamos a crearlo...");
-                registrarUsuario(usu);
+                
+                usuario.setNumeroTel(tel);
+                usuario.setCorreo(correo);
+                usuario.setCalle(calle);
+                usuario.setNumeroCalle(numCalle);
+                usuario.setPiso(piso);
+                usuario.setLetra(letra);
+                
+                actualizar(usuario, usuario.getIdUsuario());
+                
+                
+            } else if (op == 4) {
+                
             }
 
         } catch (Exception ex) {
@@ -174,7 +251,7 @@ public class ControladorUsuario {
             consulta.setString(1, objeto.getNombre());
             consulta.setString(2, objeto.getPrimerApellido());
             consulta.setString(3, objeto.getSegundoApellido());
-            consulta.setString(4, objeto.getPassword());
+            consulta.setBytes(4, objeto.getPassword());
             consulta.setString(5, objeto.getDocumentoIdentificacion());
             consulta.setString(6, objeto.getFechaNacimiento());
             consulta.setString(7, objeto.getNumeroTel());
@@ -201,7 +278,7 @@ public class ControladorUsuario {
         boolean respuesta = false;
         String sql = "select * from tb_clientes where documentoIdentificacion = '" + documentoIdentificacion + "';";
         Statement st;
-        Connection cn  = null;
+        Connection cn = null;
         try {
             cn = Conexion.conectar();
             st = cn.createStatement();
@@ -215,12 +292,15 @@ public class ControladorUsuario {
         return respuesta;
     }
 
-    public boolean loginUser(String documento) {
-        boolean respuesta = false;
+    public static int loginUser(String documento, String pass) throws Exception {
+
+        int id = 0;
+        byte[] passw = null;
+
         Connection cn = null;
         try {
             cn = (Connection) Conexion.conectar();
-            String sql = "select password from tb_clientes where documentoIdentificacion = '" + documento + "';";
+            String sql = "select idCliente, password from tb_clientes where documentoIdentificacion = '" + documento + "';";
 
             Statement st = null;
 
@@ -229,31 +309,130 @@ public class ControladorUsuario {
                 ResultSet rs = st.executeQuery(sql);
 
                 while (rs.next()) {
-                    respuesta = true;
+                    id = rs.getInt(1);
+                    passw = rs.getBytes(2);
+                }
+
+                //desecnriptamos passw
+                String passdesencriptada = descifrarPass(passw);
+                if (passdesencriptada.equals(pass)) {
+                    return id;
                 }
 
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Error al iniciar sesion");
             }
-            return respuesta;
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return respuesta;
+        return id;
 
     }
 
-    public boolean actualizar(Usuario objeto, int idUsuario) {
+    public static Usuario obtenerDatos(String documentoIdentificacion) {
+        System.out.println("Dentro de obtener datos");
+        Connection cn = null;
+        Usuario obj = new Usuario();
+        String nombre;
+        String pApe;
+        String sApe;
+        int idUsuario;
+        String fechaNacimiento;
+        String numeroTel;
+        String correo;
+        String calle;
+        int numeroCalle;
+        int piso = 0;
+        String letra;
+        String fechaCreacion;
+        int genero;
+        int estado = 0;
+        try {
+            cn = (Connection) Conexion.conectar();
+            String sql = "select nombre, primerApellido, segundoApellido, idCliente, fechaNacimiento, telefono, correo, calle, numeroCalle, piso, letra, fechaCreacion, genero, estado from tb_clientes where documentoIdentificacion = '" + documentoIdentificacion + "';";
+
+            Statement st = null;
+
+            try {
+                st = cn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                System.out.println("consulta: " + sql);
+                System.out.println("realizando consulta");
+                while (rs.next()) {
+
+                    nombre = rs.getString("nombre");
+                    System.out.println(nombre);
+                    obj.setNombre(nombre);
+                    pApe = rs.getString("primerApellido");
+                    System.out.println(pApe);
+                    obj.setPrimerApellido(pApe);
+                    sApe = rs.getString("segundoApellido");
+                    System.out.println(sApe);
+                    obj.setSegundoApellido(sApe);
+                    idUsuario = rs.getInt("idCliente");
+                    System.out.println(idUsuario);
+                    obj.setIdUsuario(idUsuario);
+                    fechaNacimiento = rs.getString("fechaNacimiento");
+                    System.out.println(fechaNacimiento);
+                    obj.setFechaNacimiento(fechaNacimiento);
+                    numeroTel = rs.getString("telefono");
+                    System.out.println(numeroTel);
+                    obj.setNumeroTel(numeroTel);
+                    correo = rs.getString("correo");
+                    System.out.println(correo);
+                    obj.setCorreo(correo);
+                    calle = rs.getString("calle");
+                    System.out.println(calle);
+                    obj.setCalle(calle);
+                    numeroCalle = rs.getInt("numeroCalle");
+                    System.out.println(numeroCalle);
+                    obj.setNumeroCalle(numeroCalle);
+                    piso = rs.getInt("piso");
+                    System.out.println(piso);
+                    obj.setPiso(piso);
+                    letra = rs.getString("letra");
+                    System.out.println(letra);
+                    obj.setLetra(letra);
+                    fechaCreacion = rs.getString("fechaCreacion");
+                    System.out.println(fechaCreacion);
+                    obj.setFechaCreacion(fechaCreacion);
+                    genero = rs.getInt("genero");
+                    System.out.println(genero);
+                    obj.setGenero(genero);
+
+                }
+
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error al iniciar sesion");
+            }
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return obj;
+
+    }
+
+    public static boolean actualizar(Usuario objeto, int idUsuario) {
         boolean respuesta = false;
         try {
 
             Connection cn = Conexion.conectar();
-            String sql = "";
+            
+            String sql = "update tb_clientes set telefono = ?, correo = ?, calle = ?, numeroCalle = ?, piso = ?, letra = ? where idCliente = ?;";
             PreparedStatement consulta = null;
             try {
 
                 consulta = cn.prepareStatement(sql);
-                consulta.setString(1, objeto.getNombre());
+                consulta.setString(1, objeto.getNumeroTel());
+                consulta.setString(2, objeto.getCorreo());
+                consulta.setString(3, objeto.getCalle());
+                consulta.setInt(4, objeto.getNumeroCalle());
+                consulta.setInt(5, objeto.getPiso());
+                consulta.setString(6, objeto.getLetra());
+                consulta.setInt(7, idUsuario);
 
                 if (consulta.executeUpdate() > 0) {
                     respuesta = true;
@@ -319,7 +498,7 @@ public class ControladorUsuario {
     //metodo que obtiene la clave para cifrar/descifrar
     private static Cipher obtieneCipher(boolean paraCifrar) throws Exception {
         final String frase = "vhsdfsjhbvcxsbVCSVACBSAJBDbqabwdajbsjabcksancbBJHScjsalskaidwoq_áÁéÉíÍóÓúÚüÜñÑ1234567890!#%$&()=%_NO_USAR_ESTA_FRASE!_";
-        final MessageDigest digest = MessageDigest.getInstance("SHA");
+        final MessageDigest digest = MessageDigest.getInstance("SHA-256");
         digest.update(frase.getBytes("UTF-8"));
         final SecretKeySpec key = new SecretKeySpec(digest.digest(), 0, 16, "AES");
 
@@ -431,30 +610,23 @@ public class ControladorUsuario {
 
     //validamos que la fecha de nacimiento esté bien introducida y le damos formato 
     public static String validarFecha(int dia, int mes, int ano) throws ParseException {
-        
-        //validar lod dias disponibles por cada mes, 
-        
-        
-        //validar que los meses van de 1 a 12
-        
-        
-        //validar que el año está comprendido entre 1910 y el año actual menos 16 años
-        
-        
 
+        //validar lod dias disponibles por cada mes, 
+        //validar que los meses van de 1 a 12
+        //validar que el año está comprendido entre 1910 y el año actual menos 16 años
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-            
-            return formatoFecha.parse(dia+"/"+ mes + "/" + ano).toString();
+
+        return formatoFecha.parse(dia + "/" + mes + "/" + ano).toString();
     }
 
     //validamos que el genero sea 'H' o 'M'
     public static int validarGenero(String genero) {
-        
+
         String gen = genero.toUpperCase();
         int generoInt = 0;
-        if (gen.equals("H") ) {
+        if (gen.equals("H")) {
             generoInt = 1;
-        } else if (gen.equals("M") ) {
+        } else if (gen.equals("M")) {
             generoInt = 2;
         }
         return generoInt;
@@ -476,4 +648,5 @@ public class ControladorUsuario {
         return fechaActual;
 
     }
+
 }

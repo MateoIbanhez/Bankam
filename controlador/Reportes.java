@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class Reportes {
-    public void reportesClientes() throws DocumentException, BadElementException{
+    public void reportesClientes() throws DocumentException, BadElementException, IOException{
         String st = obtenerDiaActual();
         FileOutputStream archivo = null;
         try{
