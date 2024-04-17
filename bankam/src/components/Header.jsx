@@ -42,9 +42,9 @@ const Header = () => {
                         <div className="md:hidden">
                             <button className="p-2 text-gray-700 rounded-md outline-none border border-transparent focus:border-gray-400 focus:border" onClick={() => setNavbar(!navbar)}>
                                 {navbar ? (
-                                    <FaTimes className="text-gray-400 cursor-pointer" size={24} />
+                                    <FaTimes className="text-green-400 cursor-pointer" size={24} />
                                 ) : (
-                                    <FaBars className="text-gray-400 cursor-pointer" size={24} />
+                                    <FaBars className="text-green-400 cursor-pointer" size={24} />
                                 )}
                             </button>
                         </div>
@@ -55,7 +55,7 @@ const Header = () => {
                     <ul className="list-none lg:flex md:flex sm:block block gap-x-5 gap-y-16">
                         {Navbar.map((item, index) => (
                             <li key={index}>
-                                <Link to={item.link} className="text-gray-400 text-[1.15rem] font-medium tracking-wider hover:text-gray-200 ease-out duration-700">{item.name}</Link>
+                                <Link to={item.link} className="text-green-400 text-[1.15rem] font-medium tracking-wider hover:text-gray-200 ease-out duration-700">{item.name}</Link>
                             </li>
                         ))}
                     </ul>
