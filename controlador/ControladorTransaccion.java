@@ -16,11 +16,39 @@ import modelo.Cuenta;
 public class ControladorTransaccion {
 
     //metodo para hacer la transaccion
-    public boolean realizarTransaccion(int idCliente, Cuenta entrada, int cantidad) {
+    public boolean realizarTransaccion(int idCliente, Cuenta objeto, int cantidad) {
         boolean respuesta = false;
-        String sql = "insert into tb_transaccion () values(?, ?, ?, ?, ?, ?)";
+        String sql = "insert into tb_transaccion (idClienteSalida, idBanco, cantidad, idEstado, idTipoError, codigoSPEI) values(?, ?, ?, ?, ?, ?)";
         if (comporbarSaldo(cantidad, idCliente)) {
+            try {
 
+                Connection cn = Conexion.conectar();
+                try {
+                    PreparedStatement consulta = cn.prepareStatement(sql,
+                            Statement.RETURN_GENERATED_KEYS);
+                    consulta.setInt(1, idCliente);
+                    consulta.setInt(2, objeto.getIdCuenta());
+                    consulta.setDouble(3, cantidad);
+                    consulta.setInt(4, 1);
+                    consulta.setInt(5, 7);
+                    consulta.setString(6, null);
+
+                    if (consulta.executeUpdate() > 0) {
+                        respuesta = true;
+                    }
+
+                    ResultSet rs = consulta.getGeneratedKeys();
+                    while (rs.next()) {
+                        respuesta = true;
+                    }
+
+                    cn.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al obtener el saldo de la cuenta: " + e);
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ControladorCuenta.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return respuesta;
@@ -54,7 +82,7 @@ public class ControladorTransaccion {
                     String sqlUpdate = "update table tb_cuentas set saldo = ? where numCuenta = ?;";
                     consulta = cn.prepareStatement(sqlUpdate);
                     consulta.setDouble(1, saldoActualizado);
-                    consulta.setString(1, numeroCuenta);
+                    consulta.setString(2, numeroCuenta);
 
                     if (consulta.executeUpdate() > 0) {
                         respuesta = true;
@@ -100,7 +128,7 @@ public class ControladorTransaccion {
 
                 cn.close();
             } catch (SQLException e) {
-                System.out.println("Error al obtener cod pais: " + e);
+                System.out.println("Error al obtener el saldo de la cuenta: " + e);
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ControladorCuenta.class.getName()).log(Level.SEVERE, null, ex);
@@ -127,7 +155,7 @@ public class ControladorTransaccion {
 
                 cn.close();
             } catch (SQLException e) {
-                System.out.println("Error al obtener cod pais: " + e);
+                System.out.println("Error al comprobar el estado de la transaccion: " + e);
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ControladorCuenta.class.getName()).log(Level.SEVERE, null, ex);
@@ -152,7 +180,7 @@ public class ControladorTransaccion {
                 }
                 cn.close();
             } catch (SQLException e) {
-                System.out.println("Error al obtener cod pais: " + e);
+                System.out.println("Error al comprobar si la transaccion tiene algun error: " + e);
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ControladorCuenta.class.getName()).log(Level.SEVERE, null, ex);
@@ -240,9 +268,54 @@ public class ControladorTransaccion {
     }
 
     //metodo para cancelar movimiento
-    public boolean cancelarMovimientos(Cuenta objeto) {
+    public boolean cancelarMovimientos(Cuenta objeto, int idTransaccion) {
         boolean respuesta = false;
+        int intCancel = 5;
+        String sql = "update tb_transaccion set idEstado = '" + intCancel + "';";
+        try {
+            Connection cn = Conexion.conectar();
+            //obtener las entradas de la cuenta
+            try {
+                PreparedStatement consulta = cn.prepareStatement(sql,
+                        Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs = consulta.executeQuery();
+                while (rs.next()) {
+                    respuesta = true;
+                }
+                try {
+                    String sqlSelectSaldo = "select tb_transaccion.saldo, tb_cuentas.numCuenta as numCuenta from tb_transaccion "
+                            + "inner join tb_transaccion.idBanco = tb_cuentas.idCuenta where idTransaccion = '" + idTransaccion + "';";
+                    double saldo = 0.00;
+                    String numCuenta = "";
 
+                    PreparedStatement consultaSaldo = cn.prepareStatement(sqlSelectSaldo,
+                            Statement.RETURN_GENERATED_KEYS);
+                    ResultSet rsSaldo = consultaSaldo.executeQuery();
+                    while (rsSaldo.next()) {
+                        saldo = rsSaldo.getDouble("saldo");
+                        numCuenta = rs.getString("numCuenta");
+                    }
+                    try {
+                        actualizarSaldo(saldo, objeto.getNumeroCuenta(), "entrada");
+                        actualizarSaldo(saldo, numCuenta, "salida");
+                    } catch (Exception e) {
+                        System.out.println("Error al actualizar los saldos: " + e);
+                    }
+
+                    cn.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al seleccionar los datos de la cuenta : " + e);
+                }
+
+                cn.close();
+            } catch (SQLException e) {
+                System.out.println("Error al cancelar: " + e);
+            }
+            //obtener las salidas de la cuenta
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControladorCuenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return respuesta;
     }
 
