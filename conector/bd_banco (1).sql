@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-04-2024 a las 15:54:57
+-- Tiempo de generación: 19-04-2024 a las 10:31:40
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -32,12 +32,26 @@ CREATE TABLE `tb_clientes` (
   `nombre` varchar(30) NOT NULL,
   `primerApellido` varchar(30) NOT NULL,
   `segundoApellido` varchar(30) NOT NULL,
+  `password` varbinary(200) NOT NULL,
+  `documentoIdentificacion` varchar(9) NOT NULL,
   `fechaNacimiento` datetime NOT NULL,
   `telefono` varchar(9) NOT NULL,
-  `fechaCreacion` datetime DEFAULT NULL,
+  `correo` varchar(80) DEFAULT NULL,
+  `calle` varchar(180) NOT NULL,
+  `numeroCalle` int(11) DEFAULT NULL,
+  `piso` int(11) DEFAULT NULL,
+  `letra` char(2) DEFAULT NULL,
+  `fechaCreacion` datetime NOT NULL,
   `genero` int(11) NOT NULL,
   `estado` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `tb_clientes`
+--
+
+INSERT INTO `tb_clientes` (`idCliente`, `nombre`, `primerApellido`, `segundoApellido`, `password`, `documentoIdentificacion`, `fechaNacimiento`, `telefono`, `correo`, `calle`, `numeroCalle`, `piso`, `letra`, `fechaCreacion`, `genero`, `estado`) VALUES
+(2, 'a', 'a', 'a', 0x0c8d4314f973a69aff3bf0060fa16ec3, '49154724K', '1987-05-19 00:00:00', '634583869', 'aitorvazgar@gmail.com', 'Castilla la vieja', 8, 5, 'D', '2024-04-17 00:00:00', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -134,6 +148,14 @@ CREATE TABLE `tb_genero` (
   `idGenero` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tb_genero`
+--
+
+INSERT INTO `tb_genero` (`idGenero`, `nombre`) VALUES
+(1, 'HOMBRE'),
+(2, 'MUJER');
 
 -- --------------------------------------------------------
 
@@ -642,6 +664,7 @@ CREATE TABLE `tb_transaccion` (
 --
 ALTER TABLE `tb_clientes`
   ADD PRIMARY KEY (`idCliente`),
+  ADD UNIQUE KEY `documentoIdentificacion` (`documentoIdentificacion`),
   ADD KEY `estado` (`estado`),
   ADD KEY `genero` (`genero`);
 
@@ -756,7 +779,7 @@ ALTER TABLE `tb_transaccion`
 -- AUTO_INCREMENT de la tabla `tb_clientes`
 --
 ALTER TABLE `tb_clientes`
-  MODIFY `idCliente` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idCliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `tb_cuentas`
@@ -786,7 +809,7 @@ ALTER TABLE `tb_estadousuario`
 -- AUTO_INCREMENT de la tabla `tb_genero`
 --
 ALTER TABLE `tb_genero`
-  MODIFY `idGenero` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idGenero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `tb_marcatarjeta`

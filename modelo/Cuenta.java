@@ -2,19 +2,19 @@ package modelo;
 
 public class Cuenta {
     private int idCuenta;
-    private String titularCuenta;
+    private int titularCuenta;
     private String pais;
-    private int codControlPais;
+    private String codControlPais;
     private String entidad;
     private String oficina;
-    private int codControlCuenta;
-    private int numeroCuenta;
+    private String codControlCuenta;
+    private String numeroCuenta;
     private double saldo;
     private String tipoMoneda;
     private int idTarjeta;
 
     
-    public Cuenta(int idCuenta, String titularCuenta, String pais, int codControlPais, String entidad, String oficina, int codControlCuenta, int numeroCuenta, double saldo, String tipoMoneda, int idTarjeta) {
+    public Cuenta(int idCuenta, int titularCuenta, String pais, String codControlPais, String entidad, String oficina, String codControlCuenta, String numeroCuenta, double saldo, String tipoMoneda, int idTarjeta) {
         this.idCuenta = idCuenta;
         this.titularCuenta = titularCuenta;
         this.pais = pais;
@@ -30,13 +30,13 @@ public class Cuenta {
 
     public Cuenta() {
         this.idCuenta = 0;
-        this.titularCuenta = "";
+        this.titularCuenta = 0;
         this.pais = "";
-        this.codControlPais = 0;
+        this.codControlPais = "";
         this.entidad = "";
         this.oficina = "";
-        this.codControlCuenta = 0;
-        this.numeroCuenta = 0;
+        this.codControlCuenta = "";
+        this.numeroCuenta = "";
         this.saldo = 0.00;
         this.tipoMoneda = "";
         this.idTarjeta = 0;
@@ -50,11 +50,11 @@ public class Cuenta {
         this.idCuenta = idCuenta;
     }
 
-    public String getTitularCuenta() {
+    public int getTitularCuenta() {
         return titularCuenta;
     }
 
-    public void setTitularCuenta(String titularCuenta) {
+    public void setTitularCuenta(int titularCuenta) {
         this.titularCuenta = titularCuenta;
     }
 
@@ -66,11 +66,11 @@ public class Cuenta {
         this.pais = pais;
     }
 
-    public int getCodControlPais() {
+    public String getCodControlPais() {
         return codControlPais;
     }
 
-    public void setCodControlPais(int codControlPais) {
+    public void setCodControlPais(String codControlPais) {
         this.codControlPais = codControlPais;
     }
 
@@ -90,19 +90,19 @@ public class Cuenta {
         this.oficina = oficina;
     }
 
-    public int getCodControlCuenta() {
+    public String getCodControlCuenta() {
         return codControlCuenta;
     }
 
-    public void setCodControlCuenta(int codControlCuenta) {
+    public void setCodControlCuenta(String codControlCuenta) {
         this.codControlCuenta = codControlCuenta;
     }
 
-    public int getNumeroCuenta() {
+    public String getNumeroCuenta() {
         return numeroCuenta;
     }
 
-    public void setNumeroCuenta(int numeroCuenta) {
+    public void setNumeroCuenta(String numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
     }
 
