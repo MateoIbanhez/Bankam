@@ -16,7 +16,7 @@ import modelo.Cuenta;
 public class ControladorTransaccion {
 
     //metodo para hacer la transaccion
-    public boolean realizarTransaccion(int idCliente, Cuenta objeto, int cantidad) {
+    public boolean realizarTransaccion( String nombre, int idCliente, String iban, String concepto, double cantidad) {
         boolean respuesta = false;
         String sql = "insert into tb_transaccion (idClienteSalida, idBanco, cantidad, idEstado, idTipoError, codigoSPEI) values(?, ?, ?, ?, ?, ?)";
         if (comporbarSaldo(cantidad, idCliente)) {

@@ -315,8 +315,8 @@ public class ControladorUsuario {
 
                 //desecnriptamos passw
                 String passdesencriptada = descifrarPass(passw);
-                if (passdesencriptada.equals(pass)) {
-                    return id;
+                if (!passdesencriptada.equals(pass)) {
+                    id = 0;
                 }
 
             } catch (SQLException e) {

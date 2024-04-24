@@ -1,9 +1,0 @@
-
-controlador usuario -----> registrar usuario()
-                    ----->verificar si existe()
-
-                                                    queda por realizar: verificar datos del date, 
-                                                    mejora del cifrado de pass
-                                                    descrifrar pass nueva
-                                                    mejorar la logica de programacion en la entrada de datos
-                                                    
