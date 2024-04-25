@@ -1,7 +1,6 @@
 package controlador;
 
 import conexion.Conexion;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,14 +16,13 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.lang.String;
-import java.util.ArrayList;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
 import modelo.Usuario;
 
 public class ControladorUsuario {
-
+/*
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int op;
@@ -273,7 +271,7 @@ public class ControladorUsuario {
         }
         return respuesta;
     }
-
+*/
     public static boolean existeUsuario(String documentoIdentificacion) throws ClassNotFoundException {
         boolean respuesta = false;
         String sql = "select * from tb_clientes where documentoIdentificacion = '" + documentoIdentificacion + "';";

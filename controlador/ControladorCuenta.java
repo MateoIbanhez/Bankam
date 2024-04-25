@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import modelo.Cuenta;
 
 public class ControladorCuenta {
-
+/*
     public static void main() {
         String numCuenta = "1258689557";
         String entidad = "0418";
@@ -32,7 +32,7 @@ public class ControladorCuenta {
             abrirCuenta(objeto, idUsuario);
         }
     }
-
+*/
     //metodo para abrir una cuenta desde cero
     public static boolean abrirCuenta(Cuenta objeto, int idUsuario) {
         boolean respuesta = false;
@@ -244,7 +244,7 @@ public class ControladorCuenta {
         codEnt = "0128";
         oficina = "1458";
         int pCCC;
-        String restoPDC;
+        int restoPDC;
 
         int primerNO = (int) oficina.charAt(0) * 4;
         int segundoNO = (int) oficina.charAt(1) * 8;
@@ -257,11 +257,11 @@ public class ControladorCuenta {
         int cuartoNE = (int) oficina.charAt(3) * 6;
 
         int suma = primerNE + primerNO + segundoNE + segundoNO + tercerNE + tercerNO + cuartoNE + cuartoNO;
-        restoPDC = Integer.toString(suma.mod(11));
+        restoPDC = suma%11;
 
-        if (restoPDC = 10) {
+        if (restoPDC == 10) {
             pCCC = 1;
-        } else if (restoPDC = 11) {
+        } else if (restoPDC == 11) {
             pCCC = 0;
         } else {
             pCCC = restoPDC;
@@ -276,11 +276,11 @@ public class ControladorCuenta {
             int cifra = (int) numeroCuenta.charAt(i);
             cont += cifra;
         }
-        restoSDC = Integer.toString(cont.mod(11));
+        restoSDC = cont%11;
 
-        if (restoSDC = 10) {
+        if (restoSDC == 10) {
             sCCC = 1;
-        } else if (restoSDC = 11) {
+        } else if (restoSDC == 11) {
             sCCC = 0;
         } else {
             sCCC = restoSDC;
