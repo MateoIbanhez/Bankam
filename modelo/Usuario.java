@@ -43,6 +43,7 @@ public class Usuario {
         this.nombre = "";
         this.primerApellido = "";
         this.segundoApellido = "";
+        @SuppressWarnings("unused")
         byte[] password = this.password;
         this.documentoIdentificacion = "";
         this.fechaNacimiento = "";

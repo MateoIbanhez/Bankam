@@ -127,8 +127,12 @@ public class ControladorTarjeta {
     }
 
     //metodo para crear el numero de tarjeta random
+    /**
+     * @return
+     */
     public int crearNumeroTarjeta() {
         int numCuenta = 0;
+        @SuppressWarnings("unused")
         int longitud = 16;
 
         return numCuenta;

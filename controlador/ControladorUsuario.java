@@ -10,7 +10,6 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -345,6 +344,7 @@ public class ControladorUsuario {
         String letra;
         String fechaCreacion;
         int genero;
+        @SuppressWarnings("unused")
         int estado = 0;
         try {
             cn = (Connection) Conexion.conectar();
@@ -540,6 +540,7 @@ public class ControladorUsuario {
             isNumeric = false;
         } else {
             try {
+                @SuppressWarnings("unused")
                 Double num = Double.parseDouble(number);
                 isNumeric = true;
             } catch (NumberFormatException e) {

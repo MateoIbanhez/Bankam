@@ -39,6 +39,7 @@ public class ControladorCuenta {
         String codPais = obtenerCodPais(objeto.getPais());
         String ent = String.valueOf(objeto.getEntidad());
         String numC = String.valueOf(objeto.getNumeroCuenta());
+        @SuppressWarnings("unused")
         String digitoControlPais = calcularDigitoControlPais(ent, numC, codPais);
         String sql = "insert into tb_cuentas (idTitular, codPais, digitoControlPais, entidad, oficina, digitoControlCuenta, numCuenta, saldo, tipoMoneda, idTarjeta) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         try {
@@ -203,6 +204,7 @@ public class ControladorCuenta {
         return respuesta;
     }
 
+    @SuppressWarnings("unused")
     private static int calcularIBAN() {
         long numCuenta = 1234567812;
         int aux = 142800;
