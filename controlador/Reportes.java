@@ -1,25 +1,7 @@
 package controlador;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfException;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.interfaces.IAccessibleElement;
-import java.io.FileOutputStream;
-import conexion.Conexion;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-
 public class Reportes {
+    /*
     public void reportesClientes() throws DocumentException, BadElementException, IOException{
         String st = obtenerDiaActual();
         FileOutputStream archivo = null;
@@ -99,5 +81,5 @@ public class Reportes {
         
     }
     
-    
+    */
 }

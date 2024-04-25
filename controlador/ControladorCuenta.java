@@ -234,6 +234,13 @@ public class ControladorCuenta {
 
     }
 
+    /**
+     * @param codEnt
+     * @param oficina
+     * @param numeroCuenta
+     * @return
+     */
+    @SuppressWarnings("unused")
     private static String calcularDigitoControlNumCuenta(String codEnt, String oficina, String numeroCuenta) {
         String dCNC = "";
         //calculo del primer digito
@@ -290,5 +297,7 @@ public class ControladorCuenta {
         return dCNC;
 
     }
+
+    
 
 }
