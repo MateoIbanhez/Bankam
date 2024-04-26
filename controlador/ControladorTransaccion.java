@@ -303,16 +303,16 @@ public class ControladorTransaccion {
                 try {
                     Map<String, Object> filaIdClienteSalida = resultados.get(5);
                     Object valorIdClienteSalida = filaIdClienteSalida.get("idClienteSalida");
-                    String numCuentaClienteSalida = obtenerNumCuenta((int)valorIdClienteSalida);
+                    String numCuentaClienteSalida = obtenerNumCuenta((int) valorIdClienteSalida);
                     filaIdClienteSalida.put("idClienteSalida", numCuentaClienteSalida);
                     Map<String, Object> filaCantidad = resultados.get(2);
-                    Object cantidad = filaCantidad.get("cantidad") ;
+                    Object cantidad = filaCantidad.get("cantidad");
                     Map<String, Object> filaIdBanco = resultados.get(6);
                     Object valorIdBanco = filaIdClienteSalida.get("idBanco");
-                    String numCuentaIdBanco = obtenerNumCuenta((int)valorIdBanco);
+                    String numCuentaIdBanco = obtenerNumCuenta((int) valorIdBanco);
                     filaIdBanco.put("idBanco", numCuentaIdBanco);
-                    if( (int) valorIdBanco == idCuenta){   
-                        cantidad = (String) "-"+cantidad;
+                    if ((int) valorIdBanco == idCuenta) {
+                        cantidad = (String) "-" + cantidad;
                         filaCantidad.put("cantidad", cantidad);
                     }
 
@@ -437,4 +437,8 @@ public class ControladorTransaccion {
         return id;
     }
 
+    public String obtenerIdNombreCliente(int idCleinte) {
+        String nombre = "";
+        return nombre;
+    }
 }
