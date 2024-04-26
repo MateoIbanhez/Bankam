@@ -328,6 +328,77 @@ public class ControladorTransaccion {
         return resultados;
     }
 
+    @SuppressWarnings("unused")
+    public static List<Map<String, Object>> obtenerDetalleMovimiento(int idMovimiento, int idUsuario) {
+        List<Map<String, Object>> detalles = new ArrayList<>();
+
+        int idCS = 0;
+        int idB = 0;
+        double cant = 0.00;
+        String nombreEst = "";
+        String nombreErr = "";
+        String concepto = "";
+        Date fecha = null;
+
+        String sql = "select tb_transaccion.idClienteSalida, tb_transaccion.idBanco, tb_transaccion.cantidad ,tb_estadotransaccion.nombre as nombreEst , "
+        +"tb_tipoerror.nombre as nombreErr, tb_transaccion.concepto, tb_transaccion.fecha from tb_transaccion "
+        +"inner join tb_estadotransaccion on tb_transaccion.idEstado = tb_estadotransaccion.idEstado "
+        +"inner join tb_tipoerror ON tb_transaccion.idTipoError = tb_tipoerror.idTipoError where tb_transaccion.idTransaccion = '"
+                + idMovimiento + "';";
+        try {
+            Connection cn = Conexion.conectar();
+            try {
+                PreparedStatement consulta = cn.prepareStatement(sql,
+                        Statement.RETURN_GENERATED_KEYS);
+
+                ResultSet rs = consulta.getGeneratedKeys();
+                while (rs.next()) {
+                    idCS = rs.getInt("idClienteSalida ");
+                    idB = rs.getInt("idBanco ");
+
+
+                    if (idCS != idUsuario) {
+                        // Agregar la fila a la lista de resultados
+                        Map<String, Object> fila = new HashMap<>();
+                        fila.put("salida", idB);
+                        fila.put("entrada", idCS);
+                        fila.put("cantidad", rs.getDouble("cantidad"));
+                        fila.put("nombreEst", rs.getString("nombreEst"));
+                        fila.put("nombreErr", rs.getString("nombreErr"));
+                        fila.put("concepto", rs.getString("concepto"));
+                        fila.put("fecha", rs.getDate("fecha"));
+                        detalles.add(fila);
+                    }
+    
+                    // Verificar si el idBanco es diferente al idUsuario
+                    if (idB != idUsuario) {
+                        // Agregar la fila a la lista de resultados
+                        Map<String, Object> fila = new HashMap<>();
+                        fila.put("salida", idCS);
+                        fila.put("entrada", idB);
+                        fila.put("cantidad", rs.getDouble("cantidad"));
+                        fila.put("estado", rs.getString("nombreEst"));
+                        fila.put("error", rs.getString("nombreErr"));
+                        fila.put("concepto", rs.getString("concepto"));
+                        fila.put("fecha", rs.getDate("fecha"));
+                        detalles.add(fila);
+                    }
+                    
+                }
+                cn.close();
+            } catch (SQLException e) {
+                System.out.println("Error al obtener el saldo de la cuenta: " + e);
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControladorCuenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //en el cliente debe comprobar si idUsuario es igual al id de salida o entrada de dinero
+        //si el idUsuario es igual al id de salida---> cantidad en negativo (sale dinero de la cuenta)
+        //y obtener el numCuenta del id de entrada/salida (el que no es del usuario) pasando el idUsuario
+        
+        return detalles;
+    }
+
     public static String obtenerNumCuenta(int idCliente) {
         String numCuenta = "";
         String sql = "select numCuenta from tb_cuentas  where idCliente = '" + idCliente + "';";
@@ -359,7 +430,7 @@ public class ControladorTransaccion {
     public boolean cancelarMovimientos(Cuenta objeto, int idTransaccion) {
         boolean respuesta = false;
         int intCancel = 5;
-        String sql = "update tb_transaccion set idEstado = '" + intCancel + "';";
+        String sql = "update tb_transaccion set idEstado = '" + intCancel + "' where idTransaccion = '"+idTransaccion+"'';";
         try {
             Connection cn = Conexion.conectar();
             // obtener las entradas de la cuenta
@@ -436,9 +507,10 @@ public class ControladorTransaccion {
         }
         return id;
     }
-
-    public String obtenerIdNombreCliente(int idCleinte) {
-        String nombre = "";
-        return nombre;
-    }
+    /*
+     * public String obtenerIdNombreCliente(int idCleinte) {
+     * String nombre = "";
+     * return nombre;
+     * }
+     */
 }
