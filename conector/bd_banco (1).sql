@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-04-2024 a las 17:30:00
+-- Tiempo de generación: 27-04-2024 a las 17:40:03
 -- Versión del servidor: 10.4.22-MariaDB
 -- Versión de PHP: 8.0.15
 
@@ -43,15 +43,16 @@ CREATE TABLE `tb_clientes` (
   `letra` char(2) DEFAULT NULL,
   `fechaCreacion` datetime NOT NULL,
   `genero` int(11) NOT NULL,
-  `estado` int(11) NOT NULL
+  `estado` int(11) NOT NULL,
+  `idImagen` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `tb_clientes`
 --
 
-INSERT INTO `tb_clientes` (`idCliente`, `nombre`, `primerApellido`, `segundoApellido`, `password`, `documentoIdentificacion`, `fechaNacimiento`, `telefono`, `correo`, `calle`, `numeroCalle`, `piso`, `letra`, `fechaCreacion`, `genero`, `estado`) VALUES
-(2, 'a', 'a', 'a', 0x0c8d4314f973a69aff3bf0060fa16ec3, '49154724K', '1987-05-19 00:00:00', '634583869', 'aitorvazgar@gmail.com', 'Castilla la vieja', 8, 5, 'D', '2024-04-17 00:00:00', 1, 1);
+INSERT INTO `tb_clientes` (`idCliente`, `nombre`, `primerApellido`, `segundoApellido`, `password`, `documentoIdentificacion`, `fechaNacimiento`, `telefono`, `correo`, `calle`, `numeroCalle`, `piso`, `letra`, `fechaCreacion`, `genero`, `estado`, `idImagen`) VALUES
+(2, 'a', 'a', 'a', 0x0c8d4314f973a69aff3bf0060fa16ec3, '49154724K', '1987-05-19 00:00:00', '634583869', 'aitorvazgar@gmail.com', 'Castilla la vieja', 8, 5, 'D', '2024-04-17 00:00:00', 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -139,6 +140,18 @@ INSERT INTO `tb_genero` (`idGenero`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tb_imagen`
+--
+
+CREATE TABLE `tb_imagen` (
+  `idImagen` int(11) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
+  `imagen` blob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tb_paises`
 --
 
@@ -222,7 +235,8 @@ ALTER TABLE `tb_clientes`
   ADD PRIMARY KEY (`idCliente`),
   ADD UNIQUE KEY `documentoIdentificacion` (`documentoIdentificacion`),
   ADD KEY `estado` (`estado`),
-  ADD KEY `genero` (`genero`);
+  ADD KEY `genero` (`genero`),
+  ADD KEY `idImagen` (`idImagen`);
 
 --
 -- Indices de la tabla `tb_cuentas`
@@ -251,6 +265,12 @@ ALTER TABLE `tb_estadousuario`
 --
 ALTER TABLE `tb_genero`
   ADD PRIMARY KEY (`idGenero`);
+
+--
+-- Indices de la tabla `tb_imagen`
+--
+ALTER TABLE `tb_imagen`
+  ADD PRIMARY KEY (`idImagen`);
 
 --
 -- Indices de la tabla `tb_paises`
@@ -319,6 +339,12 @@ ALTER TABLE `tb_genero`
   MODIFY `idGenero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT de la tabla `tb_imagen`
+--
+ALTER TABLE `tb_imagen`
+  MODIFY `idImagen` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `tb_paises`
 --
 ALTER TABLE `tb_paises`
@@ -360,6 +386,12 @@ ALTER TABLE `tb_cuentas`
   ADD CONSTRAINT `tb_cuentas_ibfk_1` FOREIGN KEY (`idTitular`) REFERENCES `tb_clientes` (`idCliente`),
   ADD CONSTRAINT `tb_cuentas_ibfk_2` FOREIGN KEY (`codPais`) REFERENCES `tb_paises` (`idPais`),
   ADD CONSTRAINT `tb_cuentas_ibfk_4` FOREIGN KEY (`idTarjeta`) REFERENCES `tb_tarjeta` (`idTarjeta`);
+
+--
+-- Filtros para la tabla `tb_imagen`
+--
+ALTER TABLE `tb_imagen`
+  ADD CONSTRAINT `tb_imagen_ibfk_1` FOREIGN KEY (`idImagen`) REFERENCES `tb_clientes` (`idImagen`);
 
 --
 -- Filtros para la tabla `tb_transaccion`
