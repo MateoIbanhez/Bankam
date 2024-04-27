@@ -107,7 +107,7 @@ const HomeSection = () => {
                     <div className="cliente bg-gray-600 rounded-lg p-4 md:p-8">
                         <div className="mb-2 md:mb-4">
                             <p className="text-base md:text-lg lg:text-xl font-semibold text-green-400">Francisco Munoz</p>
-                            <p className="text-xs md:text-sm lg:text-base text-white">"Seguro y rapido, no se puede pedir mas, lo recomiendo encarecidamente"</p>
+                            <p className="text-xs md:text-sm lg:text-base text-white">"Seguro y rápido, no se puede pedir mas, lo recomiendo encarecidamente"</p>
                         </div>
                         <div className="w-12 md:w-16 h-12 md:h-16 bg-gray-600 rounded-full flex items-center justify-center">
                             {/* Aquí puedes agregar la imagen del cliente */}
@@ -118,8 +118,8 @@ const HomeSection = () => {
                     {/* Cliente 3 */}
                     <div className="cliente bg-gray-600 rounded-lg p-4 md:p-8">
                         <div className="mb-2 md:mb-4">
-                            <p className="text-base md:text-lg lg:text-xl font-semibold text-green-400">Ana Gonzalez</p>
-                            <p className="text-xs md:text-sm lg:text-base text-white">"Las transferencias se hacen al instante, muy comodo y su interfaz muy completa"</p>
+                            <p className="text-base md:text-lg lg:text-xl font-semibold text-green-400">Ana González</p>
+                            <p className="text-xs md:text-sm lg:text-base text-white">"Las transferencias se hacen al instante, muy cómodo y su interfaz muy completa"</p>
                         </div>
                         <div className="w-12 md:w-16 h-12 md:h-16 bg-gray-600 rounded-full flex items-center justify-center">
                             {/* Aquí puedes agregar la imagen del cliente */}

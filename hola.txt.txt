@@ -1,7 +1,3 @@
-Hola mundo!
-
-Como estas?
-
-AITOR ME LA COME DE PIE
-
-Y ME COBRA 5 PAVOS
+Muy buenas, este es un documento explicativo y de introducción a nuestro proyecto. La idea principal de este pequeño proyecto era recrear lo mas fielmente posible el comienzo de una Startup de jovenes emprendedores en el sector de la banca. Como se puede apreciar tanto en lo estético como en lo funcional hemos buscado desmarcarnos de los bancos mas rudimentarios y consolidados del mercado, cogiendo inlfuencias de nuevas fuerzas como puede ser Revolut para inspirar la infrasestructura. Finalmente hemos padecido ciertos contratiempos que nos han impedido llevar a cabo la implementación de funcionalidad de nuestra aplicación. Por ello disponen de 2 ramas en el repositorio, la MAIN corresponde al FrontEnd y la master tiene todo lo relacionado al Backend. Muchas gracias por su tiempo, ha sido un proceso enriquecedor y desafiante.
+Cordiales saludos y recuerdos.
+El equipo de Bankam.

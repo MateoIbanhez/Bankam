@@ -46,9 +46,9 @@ const Transferencias = () => {
     return (
         <section className="flex flex-col items-center justify-center py-8 md:py-16 lg:py-24 space-y-8 md:space-y-12 lg:space-y-16">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 text-center text-green-400">Bienvenido a tus Transferencias</h1>
-            <div className='text-white text-18px mb-10'>
-                <p>En esta seccion puedes hacer transferencias, solicitar un historial de las que ya has realizado y cancelar una transferencia si es necesario.</p>
-            </div>
+            <div className="text-center text-white text-lg lg:text-2xl xl:text-1xl mb-10">
+    <p>En esta sección puedes hacer transferencias, solicitar un historial de las que ya has realizado y cancelar una transferencia si es necesario.</p>
+</div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
                 <div className="bg-gray-800 p-8 rounded-lg text-center">
                     <h3 className="text-xl font-semibold mb-6 text-white">Hacer Transferencia</h3>
