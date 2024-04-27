@@ -2,6 +2,7 @@ package controlador;
 
 import conexion.Conexion;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,9 +27,56 @@ import java.nio.file.Paths;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
+import javax.xml.ws.spi.http.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import modelo.Usuario;
 
 public class ControladorUsuario {
+    public static class LoginHandler implements HttpHandler {
+
+        
+        /**
+         * @param exchange
+         */
+        public static void handle(HttpExchange exchange){
+            // Obtener los parámetros de la solicitud
+            String documento;
+            String pass;
+            final String query = exchange.getRequestURI().getQuery();
+            String[] params = query.split("&");
+            for (String param : params) {
+                String[] keyValue = param.split("=");
+                String key = keyValue[0];
+                String value = keyValue[1];
+                if (key.equals("password")) {
+                    // La contraseña se encuentra en el parámetro "password"
+                    pass = value;
+                }
+                if (key.equals("documento")) {
+                    // La contraseña se encuentra en el parámetro "password"
+                    documento = value;
+                }
+            }
+            // Llamar al método loginUser con los parámetros obtenidos
+            int log = loginUser(documento, pass);
+            
+            // Responder a la solicitud
+            String response = "Llamada al método loginUser() del controlador de usuario";
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+
+        public String toString() {
+            return "LoginHandler []";
+        }
+
+        public void handle(com.sun.net.httpserver.HttpExchange arg0){
+            throw new UnsupportedOperationException("Unimplemented method 'handle'");
+        }
+    }
+
     /*
      * public static void main(String[] args) {
      * Scanner sc = new Scanner(System.in);
@@ -366,7 +414,7 @@ public class ControladorUsuario {
         try {
             cn = (Connection) Conexion.conectar();
             String sql = "select nombre, primerApellido, segundoApellido, idCliente, fechaNacimiento, telefono, correo, calle, numeroCalle, piso, letra, fechaCreacion, "
-            +" genero, estado from tb_clientes where documentoIdentificacion = '"
+                    + " genero, estado from tb_clientes where documentoIdentificacion = '"
                     + documentoIdentificacion + "';";
 
             Statement st = null;
@@ -431,7 +479,8 @@ public class ControladorUsuario {
         return obj;
 
     }
-    //metodo para actualizar
+
+    // metodo para actualizar
     public static boolean actualizar(Usuario objeto, int idUsuario) {
         boolean respuesta = false;
         try {
@@ -575,7 +624,7 @@ public class ControladorUsuario {
         return resp;
     }
 
-    public static String recuperarImagen(int idUsuario) throws IOException, ClassNotFoundException{
+    public static String recuperarImagen(int idUsuario) throws IOException, ClassNotFoundException {
         String rutaImagenRecuperada = "";
         String sql = "select imagen from tb_imgPerfil where idUsuario = '" + idUsuario + "';";
         String rutaActual = System.getProperty("user.dir");
@@ -608,145 +657,152 @@ public class ControladorUsuario {
         return rutaImagenRecuperada;
     }
 
-
-
-
     /*
-    // metodo para validar algunos datos
-    public static boolean validarEmail(String email) {
-        Pattern patron = Pattern
-                .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-        Matcher mat = patron.matcher(email);
-        return mat.find();
-    }
-
-    // validacion documentoIdentificacion
-    public static boolean validarDocumentoIdentificacion(String documentoIdentificacion) {
-        final String dniChars = "TRWAGMYFPDXBNJZSQVHLCKE";
-        boolean respuesta = false;
-        String intPartDNI = documentoIdentificacion.trim().replaceAll(" ", "").substring(0, 8);
-        char ltrDNI = documentoIdentificacion.charAt(8);
-        int valNumDni = Integer.parseInt(intPartDNI) % 23;
-        System.out.println(valNumDni + "\n\n");
-
-        System.out.println(ltrDNI + "\n\n");
-        System.out.println(intPartDNI + "\n\n");
-        respuesta = !(documentoIdentificacion.length() != 9 || isStringNumeric(intPartDNI) == false
-                || dniChars.charAt(valNumDni) != ltrDNI);
-
-        System.out.println(respuesta + "\n\n");
-        return respuesta;
-    }
-
-    public static boolean isStringNumeric(String number) {
-        boolean isNumeric;
-        if (number == null) {
-            isNumeric = false;
-        } else {
-            try {
-                @SuppressWarnings("unused")
-                Double num = Double.parseDouble(number);
-                isNumeric = true;
-            } catch (NumberFormatException e) {
-                isNumeric = false;
-            }
-        }
-        return isNumeric;
-    }
-
-    // validamos que el documento sean solo numeros
-    // public static boolean soloNumeros(String documentoIdentificacion) {
-    // String cadenaSinLetraFinal = documentoIdentificacion.substring(0,
-    // documentoIdentificacion.length() - 1);
-    //
-    // String numero = "";
-    // String dni = "";
-    // String[] numeros = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-    // for (int i = 0; i < cadenaSinLetraFinal.length(); i++) {
-    // numero = cadenaSinLetraFinal.substring(i, i + 1);
-    // for (int j = 0; i < numeros.length; j++) {
-    // if (numero.equals(numeros[j])) {
-    // dni = numeros[j];
-    // }
-    // }
-    // }
-    // return dni.length() == 8;
-    // }
-    // validamos que haya una letra en el dni
-    // private static String letraDocumentoIdentificacion(String
-    // documentoIdentificacion) {
-    // int miDNI = Integer.parseInt(documentoIdentificacion.substring(0, 8));
-    // int resto = 0;
-    // String miLetra = "";
-    // String[] asignacionLetra = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
-    // "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y",
-    // "Z"};
-    //
-    // resto = miDNI % 26;
-    //
-    // miLetra = asignacionLetra[resto];
-    //
-    // return miLetra;
-    // }
-    // validamos que las cadenas sean solo de letras(nombre, apellidos, calle)
-    // public static boolean validarSoloLetras(String cadena) {
-    // for (int i = 0; i < cadena.length(); i++) {
-    // if (!Character.isAlphabetic((cadena.charAt(i)))) {
-    // return false;
-    // }
-    // }
-    // return true;
-    // }
-    // validamos que el numero de telefono cumpla con la longitud y que sean solo
-    // numeros
-    public static boolean validarTelefono(String cadena) {
-        boolean respuesta = false;
-        if (cadena.length() != 9) {
-            respuesta = false;
-        } else {
-            String intPartDNI = cadena.trim().replaceAll(" ", "").substring(0, 9);
-
-            if (isStringNumeric(intPartDNI) == false) {
-                respuesta = false;
-            } else {
-                respuesta = true;
-            }
-
-        }
-        return respuesta;
-    }
-
-    // validamos que la fecha de nacimiento esté bien introducida y le damos formato
-    public static String validarFecha(int dia, int mes, int ano) throws ParseException {
-
-        // validar lod dias disponibles por cada mes,
-        // validar que los meses van de 1 a 12
-        // validar que el año está comprendido entre 1910 y el año actual menos 16 años
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-
-        return formatoFecha.parse(dia + "/" + mes + "/" + ano).toString();
-    }
-
-    // validamos que el genero sea 'H' o 'M'
-    public static int validarGenero(String genero) {
-
-        String gen = genero.toUpperCase();
-        int generoInt = 0;
-        if (gen.equals("H")) {
-            generoInt = 1;
-        } else if (gen.equals("M")) {
-            generoInt = 2;
-        }
-        return generoInt;
-    }
-
-    public static boolean validarLetra(String cadena) {
-        boolean respuesta = false;
-        if (cadena.length() == 1) {
-            respuesta = true;
-        }
-        return respuesta;
-
-    }
-    */
+     * // metodo para validar algunos datos
+     * public static boolean validarEmail(String email) {
+     * Pattern patron = Pattern
+     * .compile(
+     * "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+     * );
+     * Matcher mat = patron.matcher(email);
+     * return mat.find();
+     * }
+     * 
+     * // validacion documentoIdentificacion
+     * public static boolean validarDocumentoIdentificacion(String
+     * documentoIdentificacion) {
+     * final String dniChars = "TRWAGMYFPDXBNJZSQVHLCKE";
+     * boolean respuesta = false;
+     * String intPartDNI = documentoIdentificacion.trim().replaceAll(" ",
+     * "").substring(0, 8);
+     * char ltrDNI = documentoIdentificacion.charAt(8);
+     * int valNumDni = Integer.parseInt(intPartDNI) % 23;
+     * System.out.println(valNumDni + "\n\n");
+     * 
+     * System.out.println(ltrDNI + "\n\n");
+     * System.out.println(intPartDNI + "\n\n");
+     * respuesta = !(documentoIdentificacion.length() != 9 ||
+     * isStringNumeric(intPartDNI) == false
+     * || dniChars.charAt(valNumDni) != ltrDNI);
+     * 
+     * System.out.println(respuesta + "\n\n");
+     * return respuesta;
+     * }
+     * 
+     * public static boolean isStringNumeric(String number) {
+     * boolean isNumeric;
+     * if (number == null) {
+     * isNumeric = false;
+     * } else {
+     * try {
+     * 
+     * @SuppressWarnings("unused")
+     * Double num = Double.parseDouble(number);
+     * isNumeric = true;
+     * } catch (NumberFormatException e) {
+     * isNumeric = false;
+     * }
+     * }
+     * return isNumeric;
+     * }
+     * 
+     * // validamos que el documento sean solo numeros
+     * // public static boolean soloNumeros(String documentoIdentificacion) {
+     * // String cadenaSinLetraFinal = documentoIdentificacion.substring(0,
+     * // documentoIdentificacion.length() - 1);
+     * //
+     * // String numero = "";
+     * // String dni = "";
+     * // String[] numeros = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+     * // for (int i = 0; i < cadenaSinLetraFinal.length(); i++) {
+     * // numero = cadenaSinLetraFinal.substring(i, i + 1);
+     * // for (int j = 0; i < numeros.length; j++) {
+     * // if (numero.equals(numeros[j])) {
+     * // dni = numeros[j];
+     * // }
+     * // }
+     * // }
+     * // return dni.length() == 8;
+     * // }
+     * // validamos que haya una letra en el dni
+     * // private static String letraDocumentoIdentificacion(String
+     * // documentoIdentificacion) {
+     * // int miDNI = Integer.parseInt(documentoIdentificacion.substring(0, 8));
+     * // int resto = 0;
+     * // String miLetra = "";
+     * // String[] asignacionLetra = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
+     * "J",
+     * // "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y",
+     * // "Z"};
+     * //
+     * // resto = miDNI % 26;
+     * //
+     * // miLetra = asignacionLetra[resto];
+     * //
+     * // return miLetra;
+     * // }
+     * // validamos que las cadenas sean solo de letras(nombre, apellidos, calle)
+     * // public static boolean validarSoloLetras(String cadena) {
+     * // for (int i = 0; i < cadena.length(); i++) {
+     * // if (!Character.isAlphabetic((cadena.charAt(i)))) {
+     * // return false;
+     * // }
+     * // }
+     * // return true;
+     * // }
+     * // validamos que el numero de telefono cumpla con la longitud y que sean solo
+     * // numeros
+     * public static boolean validarTelefono(String cadena) {
+     * boolean respuesta = false;
+     * if (cadena.length() != 9) {
+     * respuesta = false;
+     * } else {
+     * String intPartDNI = cadena.trim().replaceAll(" ", "").substring(0, 9);
+     * 
+     * if (isStringNumeric(intPartDNI) == false) {
+     * respuesta = false;
+     * } else {
+     * respuesta = true;
+     * }
+     * 
+     * }
+     * return respuesta;
+     * }
+     * 
+     * // validamos que la fecha de nacimiento esté bien introducida y le damos
+     * formato
+     * public static String validarFecha(int dia, int mes, int ano) throws
+     * ParseException {
+     * 
+     * // validar lod dias disponibles por cada mes,
+     * // validar que los meses van de 1 a 12
+     * // validar que el año está comprendido entre 1910 y el año actual menos 16
+     * años
+     * SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+     * 
+     * return formatoFecha.parse(dia + "/" + mes + "/" + ano).toString();
+     * }
+     * 
+     * // validamos que el genero sea 'H' o 'M'
+     * public static int validarGenero(String genero) {
+     * 
+     * String gen = genero.toUpperCase();
+     * int generoInt = 0;
+     * if (gen.equals("H")) {
+     * generoInt = 1;
+     * } else if (gen.equals("M")) {
+     * generoInt = 2;
+     * }
+     * return generoInt;
+     * }
+     * 
+     * public static boolean validarLetra(String cadena) {
+     * boolean respuesta = false;
+     * if (cadena.length() == 1) {
+     * respuesta = true;
+     * }
+     * return respuesta;
+     * 
+     * }
+     */
 }

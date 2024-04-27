@@ -1,6 +1,8 @@
 package controlador;
 
 import conexion.Conexion;
+
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,9 +12,58 @@ import java.sql.Statement;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.xml.ws.spi.http.HttpExchange;
+
 import modelo.Cuenta;
 
 public class ControladorCuenta {
+
+    public static class LoginHandler implements HttpHandler {
+
+        
+        /**
+         * @param exchange
+         */
+        public static void handle(HttpExchange exchange){
+            // Obtener los parámetros de la solicitud
+            String documento;
+            String pass;
+            final String query = exchange.getRequestURI().getQuery();
+            String[] params = query.split("&");
+            for (String param : params) {
+                String[] keyValue = param.split("=");
+                String key = keyValue[0];
+                String value = keyValue[1];
+                if (key.equals("password")) {
+                    // La contraseña se encuentra en el parámetro "password"
+                    pass = value;
+                }
+                if (key.equals("documento")) {
+                    // La contraseña se encuentra en el parámetro "password"
+                    documento = value;
+                }
+            }
+            // Llamar al método loginUser con los parámetros obtenidos
+            int log = loginUser(documento, pass);
+            
+            // Responder a la solicitud
+            String response = "Llamada al método loginUser() del controlador de usuario";
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+
+        public String toString() {
+            return "LoginHandler []";
+        }
+
+        public void handle(com.sun.net.httpserver.HttpExchange arg0){
+            throw new UnsupportedOperationException("Unimplemented method 'handle'");
+        }
+    }
+
 /*
     public static void main() {
         String numCuenta = "1258689557";
