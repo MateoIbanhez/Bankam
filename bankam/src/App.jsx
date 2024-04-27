@@ -5,6 +5,7 @@ import HomeSection from './components/HomeSection';
 import Login from './components/Login';
 import Transferencias from './components/Transferencias';
 import Soporte from './components/Soporte'
+import Contacto from './components/Contacto'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/transferencias" element={<Transferencias />} />
           <Route path="/soporte" element={<Soporte />} />
+          <Route path="/contacto" element={<Contacto />} />
           <Route path="/" element={<HomeSection />} />
         </Routes>
       </div>
