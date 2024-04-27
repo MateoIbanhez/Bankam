@@ -62,7 +62,7 @@ public class ControladorCuenta {
                 consulta.setString(6, objeto.getCodControlCuenta());
                 consulta.setString(7, numC);
                 consulta.setDouble(8, objeto.getSaldo());
-                consulta.setString(8, objeto.getTipoMoneda());
+                consulta.setString(8, objeto.getTinseipoMoneda());
                 consulta.setInt(8, objeto.getIdTarjeta());
 
                 if (consulta.executeUpdate() > 0) {
@@ -206,7 +206,6 @@ public class ControladorCuenta {
         } catch (SQLException e) {
             System.out.println("Error al consultar numero de cuenta: " + e);
         }
-        System.out.println(respuesta);
         return respuesta;
     }
 

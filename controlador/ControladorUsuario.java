@@ -344,7 +344,6 @@ public class ControladorUsuario {
     }
 
     public static Usuario obtenerDatos(String documentoIdentificacion) {
-        System.out.println("Dentro de obtener datos");
         Connection cn = null;
         Usuario obj = new Usuario();
         String nombre;
@@ -373,48 +372,34 @@ public class ControladorUsuario {
             try {
                 st = cn.createStatement();
                 ResultSet rs = st.executeQuery(sql);
-                System.out.println("consulta: " + sql);
-                System.out.println("realizando consulta");
+                
                 while (rs.next()) {
 
                     nombre = rs.getString("nombre");
-                    System.out.println(nombre);
                     obj.setNombre(nombre);
                     pApe = rs.getString("primerApellido");
-                    System.out.println(pApe);
                     obj.setPrimerApellido(pApe);
                     sApe = rs.getString("segundoApellido");
-                    System.out.println(sApe);
                     obj.setSegundoApellido(sApe);
                     idUsuario = rs.getInt("idCliente");
-                    System.out.println(idUsuario);
                     obj.setIdUsuario(idUsuario);
                     fechaNacimiento = rs.getString("fechaNacimiento");
-                    System.out.println(fechaNacimiento);
                     obj.setFechaNacimiento(fechaNacimiento);
                     numeroTel = rs.getString("telefono");
-                    System.out.println(numeroTel);
                     obj.setNumeroTel(numeroTel);
                     correo = rs.getString("correo");
-                    System.out.println(correo);
                     obj.setCorreo(correo);
                     calle = rs.getString("calle");
-                    System.out.println(calle);
                     obj.setCalle(calle);
                     numeroCalle = rs.getInt("numeroCalle");
-                    System.out.println(numeroCalle);
                     obj.setNumeroCalle(numeroCalle);
                     piso = rs.getInt("piso");
-                    System.out.println(piso);
                     obj.setPiso(piso);
                     letra = rs.getString("letra");
-                    System.out.println(letra);
                     obj.setLetra(letra);
                     fechaCreacion = rs.getString("fechaCreacion");
-                    System.out.println(fechaCreacion);
                     obj.setFechaCreacion(fechaCreacion);
                     genero = rs.getInt("genero");
-                    System.out.println(genero);
                     obj.setGenero(genero);
 
                 }
