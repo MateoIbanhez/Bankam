@@ -2,7 +2,6 @@ package controlador;
 
 import conexion.Conexion;
 
-import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,69 +11,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.ws.spi.http.HttpExchange;
-
-import com.sun.net.httpserver.HttpHandler;
-
-import modelo.Tarjeta;
-
 public class ControladorTarjeta {
-
-    public static class TarjetaHandler implements HttpHandler {
-
-        
-        /**
-         * @param exchange
-         */
-        public static void handle(HttpExchange exchange){
-            // Obtener los parámetros de la solicitud
-            String estadoTarjeta;
-            String tipoTarjeta;
-            String numeroTarjeta;
-            String marcaTarjeta;
-            final String query = exchange.getRequestURI().getQuery();
-            String[] params = query.split("&");
-            for (String param : params) {
-                String[] keyValue = param.split("=");
-                String key = keyValue[0];
-                String value = keyValue[1];
-                if (key.equals("estadoTarjeta")) {
-                    // La contraseña se encuentra en el parámetro "password"
-                    estadoTarjeta = value;
-                }
-                if (key.equals("tipoTarjeta")) {
-                    // La contraseña se encuentra en el parámetro "password"
-                    tipoTarjeta = value;
-                }
-                if (key.equals("numeroTarjeta")) {
-                    // La contraseña se encuentra en el parámetro "password"
-                    numeroTarjeta = value;
-                }
-                if (key.equals("marcaTarjeta")) {
-                    // La contraseña se encuentra en el parámetro "password"
-                    marcaTarjeta = value;
-                }
-            }
-            // Llamar al método loginUser con los parámetros obtenidos
-            boolean res = crearTarjeta(estadoTarjeta, tipoTarjeta, marcaTarjeta, numeroTarjeta);
-            
-            // Responder a la solicitud
-            String response = "Llamada al método loginUser() del controlador de usuario";
-            exchange.sendResponseHeaders(200, response.getBytes().length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        }
-
-        public String toString() {
-            return "TarjetaHandler []";
-        }
-
-        public void handle(com.sun.net.httpserver.HttpExchange arg0){
-            throw new UnsupportedOperationException("Unimplemented method 'handle'");
-        }
-    }
-
 
 
     // metodo para crear una nueva tarjeta

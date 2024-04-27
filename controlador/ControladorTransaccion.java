@@ -2,7 +2,6 @@ package controlador;
 
 import conexion.Conexion;
 
-import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -21,70 +20,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.ws.spi.http.HttpExchange;
-
-import com.sun.net.httpserver.HttpHandler;
-
 import modelo.Cuenta;
 
 public class ControladorTransaccion {
 
-    public static class TransaccionHandler implements HttpHandler {
-
-        
-        /**
-         * @param exchange
-         */
-        public static void handle(HttpExchange exchange){
-            // Obtener los parámetros de la solicitud
-            String iban;
-            String nombre;
-            String concepto;
-            double cantidad;
-            int idCliente;
-            final String query = exchange.getRequestURI().getQuery();
-            String[] params = query.split("&");
-            for (String param : params) {
-                String[] keyValue = param.split("=");
-                String key = keyValue[0];
-                String value = keyValue[1];
-                
-                if (key.equals("nombre")) {
-                    nombre = value;
-                }
-                if (key.equals("iban")) {
-                    iban = value;
-                }
-                if (key.equals("idCliente")) {
-                    idCliente = Integer.parseInt(value);
-                }
-                if (key.equals("concepto")) {
-                    concepto = value;
-                }
-                if (key.equals("cantidad")) {
-                    cantidad = Double.parseDouble(value);
-                }
-            }
-            // Llamar al método loginUser con los parámetros obtenidos
-            boolean res = realizarTransaccion(nombre, idCliente, iban, concepto, cantidad);
-            
-            // Responder a la solicitud
-            String response = "Llamada al método loginUser() del controlador de usuario";
-            exchange.sendResponseHeaders(200, response.getBytes().length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        }
-
-        public String toString() {
-            return "TransaccionHandler []";
-        }
-
-        public void handle(com.sun.net.httpserver.HttpExchange arg0){
-            throw new UnsupportedOperationException("Unimplemented method 'handle'");
-        }
-    }
-
+    
 
     // metodo para hacer la transaccion
     /**
@@ -202,7 +142,7 @@ public class ControladorTransaccion {
 
     // metodo para comprobar que la cuenta de salida de la operacion tiene el dinero
     // suficiente
-    public boolean comporbarSaldo(double dineroOperacion, int idUsuario) {
+    public static boolean comporbarSaldo(double dineroOperacion, int idUsuario) {
         boolean respuesta = false;
         double saldo = 0.00;
 
@@ -575,7 +515,7 @@ public class ControladorTransaccion {
         return respuesta;
     }
 
-    public int obtenerIDCliente(String iban) {
+    public static int obtenerIDCliente(String iban) {
 
         String[] ibanSplit;
 

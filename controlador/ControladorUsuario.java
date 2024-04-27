@@ -2,20 +2,16 @@ package controlador;
 
 import conexion.Conexion;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -27,55 +23,10 @@ import java.nio.file.Paths;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
-import javax.xml.ws.spi.http.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import modelo.Usuario;
 
 public class ControladorUsuario {
-    public static class LoginHandler implements HttpHandler {
-
-        
-        /**
-         * @param exchange
-         */
-        public static void handle(HttpExchange exchange){
-            // Obtener los parámetros de la solicitud
-            String documento;
-            String pass;
-            final String query = exchange.getRequestURI().getQuery();
-            String[] params = query.split("&");
-            for (String param : params) {
-                String[] keyValue = param.split("=");
-                String key = keyValue[0];
-                String value = keyValue[1];
-                if (key.equals("password")) {
-                    // La contraseña se encuentra en el parámetro "password"
-                    pass = value;
-                }
-                if (key.equals("documento")) {
-                    // La contraseña se encuentra en el parámetro "password"
-                    documento = value;
-                }
-            }
-            // Llamar al método loginUser con los parámetros obtenidos
-            int log = loginUser(documento, pass);
-            
-            // Responder a la solicitud
-            String response = "Llamada al método loginUser() del controlador de usuario";
-            exchange.sendResponseHeaders(200, response.getBytes().length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        }
-
-        public String toString() {
-            return "LoginHandler []";
-        }
-
-        public void handle(com.sun.net.httpserver.HttpExchange arg0){
-            throw new UnsupportedOperationException("Unimplemented method 'handle'");
-        }
-    }
+    
 
     /*
      * public static void main(String[] args) {
@@ -353,7 +304,7 @@ public class ControladorUsuario {
         return respuesta;
     }
 
-    public int loginUser(String documento, String pass) throws Exception {
+    public static int loginUser(String documento, String pass) throws Exception {
 
         int id = 0;
         byte[] passw = null;
