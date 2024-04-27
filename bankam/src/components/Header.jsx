@@ -23,8 +23,8 @@ const Header = () => {
             link:"/soporte"
         },
         {
-            name:'Notificaciones',
-            link:"/notificaciones"
+            name:'Contacto',
+            link:"/contacto"
         }
     ];
 

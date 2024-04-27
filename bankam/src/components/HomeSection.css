@@ -1,6 +1,6 @@
 .contenedor-imagen {
     position: relative;
-    max-width: 700px; /* Ancho máximo de la imagen */
+    max-width: 500px; /* Ancho máximo de la imagen */
     overflow: hidden; /* Oculta el desbordamiento de la imagen cuando se aplique la transformación */
   }
   

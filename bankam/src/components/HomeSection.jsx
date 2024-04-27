@@ -31,17 +31,17 @@ const HomeSection = () => {
                 <div className="p-6 rounded-lg text-center transition duration-300 ease-in-out transform hover:scale-105">
                     <h3 className="text-xl font-semibold mb-2 text-white">Sencillo e Intuitivo</h3>
                     <p className="text-lg text-white mb-4">Interfaz sencilla e intuitiva, para todos los usuarios</p>
-                    <span className="text-4xl text-green-400" role="img" aria-label="Tick">✔️</span>
+                    <span className="text-4xl text-white" role="img" aria-label="Tick">✔️</span>
                 </div>
                 <div className="p-6 rounded-lg text-center transition duration-300 ease-in-out transform hover:scale-105">
-                    <h3 className="text-xl font-semibold mb-2 text-green-400">Operaciones Globales</h3>
-                    <p className="text-lg text-green-400 mb-4">Envía y recibe dinero de forma Internacional</p>
-                    <span className="text-4xl text-green-400" role="img" aria-label="World">🌐</span>
+                    <h3 className="text-xl font-semibold mb-2 text-white">Operaciones Globales</h3>
+                    <p className="text-lg text-white mb-4">Envía y recibe dinero de forma Internacional</p>
+                    <span className="text-4xl text-white" role="img" aria-label="World">🌐</span>
                 </div>
                 <div className="p-6 rounded-lg text-center transition duration-300 ease-in-out transform hover:scale-105">
-                    <h3 className="text-xl font-semibold mb-2 text-green-400">Seguridad Garantizada</h3>
-                    <p className="text-lg text-green-400 mb-4">Dinero y datos blindados con nuestro sistema de seguridad</p>
-                    <span className="text-4xl text-green-400" role="img" aria-label="Lock">🔒</span>
+                    <h3 className="text-xl font-semibold mb-2 text-white">Seguridad Garantizada</h3>
+                    <p className="text-lg text-white mb-4">Dinero y datos blindados con nuestro sistema de seguridad</p>
+                    <span className="text-4xl text-white" role="img" aria-label="Lock">🔒</span>
                 </div>
             </div>
             <div className="py-8 md:py-16 w-full max-w-screen-lg">
@@ -53,7 +53,7 @@ const HomeSection = () => {
                     </div>
                 ))}
             </div>
-            <div className="py-8 md:py-16 w-full max-w-screen-lg">
+            <div className="py-8 w-full max-w-screen-lg">
                 <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 text-center text-green-400">Únete a nuestra Familia</h2>
                 <p className="text-lg md:text-xl lg:text-2xl font-semibold mb-8 text-center text-green-400">Disfruta de las ventajas de la tarjeta BlackAM</p>
                 <div className="flex justify-center mt-8 space-x-12">
@@ -78,18 +78,18 @@ const HomeSection = () => {
                         </ul>
                     </div>
                 </div>
-                <div className="flex items-center justify-center mt-8">
+                <div className="flex items-center justify-center mt-1">
                     <div className="contenedor-imagen">
                         <img 
                             src="src/img/tarjeta.png" 
                             alt="Imagen de Unete a nuestra Familia" 
-                            className="mb-4 tarjeta"
+                            className="tarjeta"
                         />
                     </div>
                 </div>
             </div>
-            <section className="py-4 md:py-8 lg:py-16 w-full max-w-screen-lg">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-8 text-center text-green-400 py-4 md:py-20">Opinión de Clientes</h2>
+            <section className="py-1  w-full max-w-screen-lg">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-8 text-center text-green-400 py-4">Opinión de Clientes</h2>
                 <div className="w-full max-w-screen-lg grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* Cliente 1 */}
                     <div className="cliente bg-gray-600 rounded-lg p-4 md:p-8">
