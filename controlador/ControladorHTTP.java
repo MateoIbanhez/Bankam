@@ -324,10 +324,8 @@ public class ControladorHTTP {
             return "No se encontraron movimientos para la cuenta especificada.";
         }
     }
-    
 
     // transacciones
-
     @SuppressWarnings("unused")
     private static String handleHTTPRequestDetallesMovimientos(Socket clientSocket, int idMovimiento, int idUsuario)
             throws IOException {
@@ -381,7 +379,6 @@ public class ControladorHTTP {
         return jsonResponse.toString();
     }
 
-
     //transaccion
     @SuppressWarnings("unused")
     private static String handleHTTPRequestCancelarMovimientos(Socket clientSocket, Cuenta cuenta, int idTransaccion) throws IOException {
@@ -412,6 +409,63 @@ public class ControladorHTTP {
         }
     }
     
+    //tarjeta
+    private static String handleHTTPRequestcrearTarjeta(Socket clientSocket, String estadoTarjeta, String tipoTarjeta, String marcaTarjeta, String numeroTarjeta) throws IOException {
+        // Leer la solicitud HTTP
+        BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        StringBuilder requestBody = new StringBuilder();
+        String line;
+        boolean bodyStarted = false;
+        while ((line = reader.readLine()) != null) {
+            if (line.isEmpty()) {
+                // El cuerpo de la solicitud HTTP comienza después de una línea en blanco
+                bodyStarted = true;
+                continue;
+            }
+            if (bodyStarted) {
+                requestBody.append(line).append("\n");
+            }
+        }
+        
+        // Llamada a la función crearTarjeta del controlador de tarjeta
+        boolean creacionExitosa = ControladorTarjeta.crearTarjeta(estadoTarjeta, tipoTarjeta, marcaTarjeta, numeroTarjeta);
+        
+        if (creacionExitosa == true) {
+            return "Tarjeta creada correctamente.";
+        } else {
+            return "Error al crear la tarjeta.";
+        }
+    }
+
+    //tarjeta
+    private static String handleHTTPRequestEliminarTarjeta(Socket clientSocket, int idTarjeta) throws IOException {
+        // Leer la solicitud HTTP
+        BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        StringBuilder requestBody = new StringBuilder();
+        String line;
+        boolean bodyStarted = false;
+        while ((line = reader.readLine()) != null) {
+            if (line.isEmpty()) {
+                // El cuerpo de la solicitud HTTP comienza después de una línea en blanco
+                bodyStarted = true;
+                continue;
+            }
+            if (bodyStarted) {
+                requestBody.append(line).append("\n");
+            }
+        }
+        
+        // Llamada a la función eliminar del controlador de tarjeta
+        ControladorTarjeta controladorTarjeta = new ControladorTarjeta();
+        boolean eliminacionExitosa = controladorTarjeta.eliminar(idTarjeta);
+        
+        if (eliminacionExitosa) {
+            return "Tarjeta eliminada correctamente.";
+        } else {
+            return "Error al eliminar la tarjeta.";
+        }
+    }
+
 
     @Override
     public String toString() {
