@@ -12,6 +12,28 @@ import modelo.Cuenta;
 import modelo.Usuario;
 
 public class ControladorHTTP {
+
+    public static void main(String[] args ){
+        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+        server.createContext("/usuario/loginUser", new LoginHandler());
+        server.createContext("/usuario/deleteUser", new DeleteUserHandler());
+        server.createContext("/usuario/subirFoto", new SubirFotoHadler());
+        server.createContext("/usuario/actualizarUsuario", new ActualizarUsuarioHandler());
+        server.createContext("/cuenta/abrirCuenta", new AbrirCuentaHandler());
+        server.createContext("/cuenta/actualizarCuenta", new ActualizarCuentaHandler());
+        server.createContext("/cuenta/deleteCuenta", new DeletecuentaHandler());
+        server.createContext("/transaccion/realizarTransaccion", new RealizarTransaccionHandler());
+        server.createContext("/transaccion/consultarTransaccion", new ConsultarTransaccionHandler());
+        server.createContext("/transaccion/consultarDetalles", new ConsultarDetallesMovimientosHandler());
+        server.createContext("/transaccion/cancelarMovimiento", new CancelarMovimientosHandler());
+        server.createContext("/tarjeta/crearTarjeta", new CrearTarjetaHandler());
+        server.createContext("/tarjeta/eliminarTarjeta b", new EliminarTarjetaHandler());
+        
+        
+        server.start();
+    }
+
+
     // usuario
     @SuppressWarnings("unused")
     private static int handleHTTPRequestLogin(Socket clientSocket) throws Exception {
@@ -60,7 +82,6 @@ public class ControladorHTTP {
             return 0;
         }
     }
-
     // usuario
     @SuppressWarnings("unused")
     private static void handleHTTPRequestDeleteUser(Socket clientSocket, int idUsuario) throws Exception {
@@ -87,7 +108,6 @@ public class ControladorHTTP {
         controladorUsuario.eliminar(idUsuario);
 
     }
-
     // usuario
     @SuppressWarnings("unused")
     private static String handleHTTPRequestSubirFoto(Socket clientSocket, String rutaImg, int idUsuario)
@@ -116,7 +136,6 @@ public class ControladorHTTP {
             return "Error al subir la imagen.";
         }
     }
-
     // usuario
     @SuppressWarnings("unused")
     private static String handleHTTPRequestActualizarUsuario(Socket clientSocket, Usuario usuario) throws Exception {
@@ -144,7 +163,6 @@ public class ControladorHTTP {
             return "Error al actualizar el usuario.";
         }
     }
-
     // cuenta
     @SuppressWarnings("unused")
     private static String handleHTTPRequestAbrirCuenta(Socket clientSocket, Cuenta cuenta, int idUsuario)
@@ -174,7 +192,6 @@ public class ControladorHTTP {
             return "Error al abrir la cuenta.";
         }
     }
-
     // cuenta
     @SuppressWarnings("unused")
     private static String handleHTTPRequestActualizarCuenta(Socket clientSocket, Cuenta cuenta) throws IOException {
@@ -203,7 +220,6 @@ public class ControladorHTTP {
             return "Error al actualizar la cuenta.";
         }
     }
-
     // cuenta
     @SuppressWarnings("unused")
     private static String handleHTTPRequestEliminarCuenta(Socket clientSocket, int idCuenta) throws IOException {
@@ -232,7 +248,6 @@ public class ControladorHTTP {
             return "Error al eliminar la cuenta.";
         }
     }
-
     // transacciones
     @SuppressWarnings("unused")
     private static String handleHTTPRequestRealizarTransaccion(Socket clientSocket, String nombre, int idCliente,
@@ -378,7 +393,6 @@ public class ControladorHTTP {
         // Retornar el JSON
         return jsonResponse.toString();
     }
-
     //transaccion
     @SuppressWarnings("unused")
     private static String handleHTTPRequestCancelarMovimientos(Socket clientSocket, Cuenta cuenta, int idTransaccion) throws IOException {
@@ -408,7 +422,6 @@ public class ControladorHTTP {
             return "Error al cancelar los movimientos.";
         }
     }
-    
     //tarjeta
     private static String handleHTTPRequestcrearTarjeta(Socket clientSocket, String estadoTarjeta, String tipoTarjeta, String marcaTarjeta, String numeroTarjeta) throws IOException {
         // Leer la solicitud HTTP
@@ -473,3 +486,322 @@ public class ControladorHTTP {
     }
 
 }
+
+public class LoginHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestLogin(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+
+public class DeleteUserHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestDeleteUser(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+
+public class SubirFotoHadler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestSubirFoto(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+public class ActualizarUsuarioHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestActualizarUsuario(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+public class AbrirCuentaHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestAbrirCuenta(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+public class ActualizarCuentaHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestActualizarCuenta(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+public class DeletecuentaHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestEliminarCuenta(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+public class RealizarTransaccionHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestRealizarTransaccion(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+public class ConsultarTransaccionHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestConsultarTransacciones(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+public class ConsultarDetallesMovimientosHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestDetallesMovimientos(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+
+
+public class CancelarMovimientosHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestCancelarMovimientos(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+public class CrearTarjetaHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestcrearTarjeta(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+public class EliminarTarjetaHandler implements HttpHandler{
+    @Override
+public void handle(HttpExchange exchange) throws IOException {
+    // Manejar la solicitud
+    try {
+        // Llamar a la función del controlador y obtener el resultado
+        int resultado = ControladorHTTP.handleHTTPRequestEliminarTarjeta(exchange.getRemoteAddress());
+        
+        // Enviar la respuesta al cliente
+        String response = Integer.toString(resultado);
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    } catch (Exception e) {
+        // Enviar una respuesta de error al cliente si ocurre una excepción
+        String errorMessage = "Error interno en el servidor: " + e.getMessage();
+        exchange.sendResponseHeaders(500, errorMessage.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(errorMessage.getBytes());
+        os.close();
+    }
+}
+}
+
+
