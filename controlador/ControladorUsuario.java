@@ -353,7 +353,7 @@ public class ControladorUsuario {
         return respuesta;
     }
 
-    public static int loginUser(String documento, String pass) throws Exception {
+    public int loginUser(String documento, String pass) throws Exception {
 
         int id = 0;
         byte[] passw = null;
