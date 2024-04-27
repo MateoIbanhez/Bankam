@@ -44,7 +44,7 @@ public class ControladorTransaccion {
         boolean respuesta = false;
         LocalDate date;
         date = LocalDate.now();
-
+                boolean respDef = false;
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         String fechaStr = df.format(date);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
@@ -74,6 +74,15 @@ public class ControladorTransaccion {
                     while (rs.next()) {
                         respuesta = true;
                     }
+                    if(respuesta == true){
+                        String numCS = obtenerNumCuenta(idCliente);
+                        String numCE = obtenerNumCuenta(idBanco);
+                        boolean respCS = actualizarSaldo(cantidad, numCS, "salida");
+                        boolean respCE = actualizarSaldo(cantidad, numCE, "entrada");
+                        if(respCE == true && respCS == true){
+                            respDef = true;
+                        }
+                    }
 
                     cn.close();
                 } catch (SQLException e) {
@@ -86,11 +95,11 @@ public class ControladorTransaccion {
             return false;
         }
 
-        return respuesta;
+        return respDef;
     }
 
     // metodo para actualizar en las diferentes cuentas el saldo
-    public boolean actualizarSaldo(double cantidad, String numeroCuenta, String tipo) {
+    public static boolean actualizarSaldo(double cantidad, String numeroCuenta, String tipo) {
         boolean respuesta = false;
         double saldoActualizado = 0.00;
         double saldoActual = 0.00;
