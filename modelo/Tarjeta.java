@@ -5,9 +5,9 @@ public class Tarjeta {
     private String estadoTarjeta;
     private String tipoTarjeta;
     private String marcaTarjeta;
-    private int numeroTarjeta;
+    private String numeroTarjeta;
 
-    public Tarjeta(int idTarjeta, String estadoTarjeta, String tipoTarjeta, String marcaTarjeta, int numeroTarjeta) {
+    public Tarjeta(int idTarjeta, String estadoTarjeta, String tipoTarjeta, String marcaTarjeta, String numeroTarjeta) {
         this.idTarjeta = idTarjeta;
         this.estadoTarjeta = estadoTarjeta;
         this.tipoTarjeta = tipoTarjeta;
@@ -22,7 +22,7 @@ public class Tarjeta {
         this.estadoTarjeta = "";
         this.tipoTarjeta = "";
         this.marcaTarjeta = "";
-        this.numeroTarjeta = 0;
+        this.numeroTarjeta = "";
     }
 
     public int getIdTarjeta() {
@@ -57,11 +57,11 @@ public class Tarjeta {
         this.marcaTarjeta = marcaTarjeta;
     }
 
-    public int getNumeroTarjeta() {
+    public String getNumeroTarjeta() {
         return numeroTarjeta;
     }
 
-    public void setNumeroTarjeta(int numeroTarjeta) {
+    public void setNumeroTarjeta(String numeroTarjeta) {
         this.numeroTarjeta = numeroTarjeta;
     }
     

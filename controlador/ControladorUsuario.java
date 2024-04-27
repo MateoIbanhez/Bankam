@@ -365,7 +365,8 @@ public class ControladorUsuario {
         int estado = 0;
         try {
             cn = (Connection) Conexion.conectar();
-            String sql = "select nombre, primerApellido, segundoApellido, idCliente, fechaNacimiento, telefono, correo, calle, numeroCalle, piso, letra, fechaCreacion, genero, estado from tb_clientes where documentoIdentificacion = '"
+            String sql = "select nombre, primerApellido, segundoApellido, idCliente, fechaNacimiento, telefono, correo, calle, numeroCalle, piso, letra, fechaCreacion, "
+            +" genero, estado from tb_clientes where documentoIdentificacion = '"
                     + documentoIdentificacion + "';";
 
             Statement st = null;
@@ -430,7 +431,7 @@ public class ControladorUsuario {
         return obj;
 
     }
-
+    //metodo para actualizar
     public static boolean actualizar(Usuario objeto, int idUsuario) {
         boolean respuesta = false;
         try {
@@ -464,7 +465,7 @@ public class ControladorUsuario {
         return respuesta;
     }
 
-    // metodo pra eliminar el usuario
+    // metodo para eliminar el usuario
     public boolean eliminar(int idUsuario) {
         boolean respuesta = false;
         try {
@@ -486,12 +487,6 @@ public class ControladorUsuario {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return respuesta;
-    }
-
-    public boolean subirDocumentos() {
-        boolean respuesta = false;
-
         return respuesta;
     }
 
@@ -528,6 +523,95 @@ public class ControladorUsuario {
         return aes;
     }
 
+    public static String obtenerFechaActual() {
+
+        Date diaActual = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        String fechaActual = sdf.format(diaActual);
+        return fechaActual;
+
+    }
+
+    /**
+     * @param rutaImg
+     * @param idUsuario
+     * @return
+     */
+    public static boolean insertarImg(String rutaImg, int idUsuario)
+            throws FileNotFoundException {
+        String rutaControlador = System.getProperty("user.dir");
+        String rutaImagenes = Paths.get(rutaControlador, "img", "perfil").toString();
+        String nombre = "fotoPerfil_" + idUsuario + ".jpg";
+        boolean resp = false;
+
+        String sql = "insert into tb_imgPerfil (nombre, imagen, idUsuario) values (?, ?, ?);";
+        try {
+            Connection cn = Conexion.conectar();
+            try {
+                FileInputStream imagen = new FileInputStream(rutaImagenes);
+                try {
+                    PreparedStatement consulta = cn.prepareStatement(sql,
+                            Statement.RETURN_GENERATED_KEYS);
+                    consulta.setString(1, nombre);
+                    consulta.setBinaryStream(2, imagen);
+                    consulta.setInt(3, idUsuario);
+                    consulta.executeUpdate();
+                    Path origen = Paths.get(rutaImg);
+                    Path destino = Paths.get(rutaImagenes, nombre);
+                    Path copia = Files.copy(origen, destino);
+                    if (copia != null) {
+                        resp = true;
+                    }
+                    cn.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al insertar imagen: " + e);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resp;
+    }
+
+    public static String recuperarImagen(int idUsuario) throws IOException, ClassNotFoundException{
+        String rutaImagenRecuperada = "";
+        String sql = "select imagen from tb_imgPerfil where idUsuario = '" + idUsuario + "';";
+        String rutaActual = System.getProperty("user.dir");
+        String rutaImagenes = Paths.get(rutaActual, "img", "perfil").toString();
+        try {
+            Connection cn = Conexion.conectar();
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            if (rs.next()) {
+                InputStream is = rs.getBinaryStream("imagen");
+                rutaImagenRecuperada = Paths.get(rutaImagenes, "fotoPerfil_" + idUsuario + ".jpg")
+                        .toString();
+                FileOutputStream fos = new FileOutputStream(rutaImagenRecuperada);
+                byte[] buffer = new byte[1024];
+                while (is.read(buffer) > 0) {
+                    fos.write(buffer);
+                }
+                fos.close();
+                is.close();
+                System.out.println("Imagen recuperada y guardada correctamente.");
+                return rutaImagenRecuperada;
+            } else {
+                System.out.println("No se encontró ninguna imagen para el usuario especificado.");
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al consultar usuario: " + e);
+        }
+
+        return rutaImagenRecuperada;
+    }
+
+
+
+
+    /*
     // metodo para validar algunos datos
     public static boolean validarEmail(String email) {
         Pattern patron = Pattern
@@ -664,90 +748,5 @@ public class ControladorUsuario {
         return respuesta;
 
     }
-
-    public static String obtenerFechaActual() {
-
-        Date diaActual = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        String fechaActual = sdf.format(diaActual);
-        return fechaActual;
-
-    }
-
-    /**
-     * @param rutaImg
-     * @param idUsuario
-     * @return
-     */
-    public static boolean insertarImg(String rutaImg, int idUsuario)
-            throws FileNotFoundException {
-        String rutaControlador = System.getProperty("user.dir");
-        String rutaImagenes = Paths.get(rutaControlador, "img", "perfil").toString();
-        String nombre = "fotoPerfil_" + idUsuario + ".jpg";
-        boolean resp = false;
-
-        String sql = "insert into tb_imgPerfil (nombre, imagen, idUsuario) values (?, ?, ?);";
-        try {
-            Connection cn = Conexion.conectar();
-            try {
-                FileInputStream imagen = new FileInputStream(rutaImagenes);
-                try {
-                    PreparedStatement consulta = cn.prepareStatement(sql,
-                            Statement.RETURN_GENERATED_KEYS);
-                    consulta.setString(1, nombre);
-                    consulta.setBinaryStream(2, imagen);
-                    consulta.setInt(3, idUsuario);
-                    consulta.executeUpdate();
-                    Path origen = Paths.get(rutaImg);
-                    Path destino = Paths.get(rutaImagenes, nombre);
-                    Path copia = Files.copy(origen, destino);
-                    if (copia != null) {
-                        resp = true;
-                    }
-                    cn.close();
-                } catch (SQLException e) {
-                    System.out.println("Error al insertar imagen: " + e);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return resp;
-    }
-
-    public static String recuperarImagen(int idUsuario) throws IOException, ClassNotFoundException{
-        String rutaImagenRecuperada = "";
-        String sql = "select imagen from tb_imgPerfil where idUsuario = '" + idUsuario + "';";
-        String rutaActual = System.getProperty("user.dir");
-        String rutaImagenes = Paths.get(rutaActual, "img", "perfil").toString();
-        try {
-            Connection cn = Conexion.conectar();
-            Statement st = cn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            if (rs.next()) {
-                InputStream is = rs.getBinaryStream("imagen");
-                rutaImagenRecuperada = Paths.get(rutaImagenes, "fotoPerfil_" + idUsuario + ".jpg")
-                        .toString();
-                FileOutputStream fos = new FileOutputStream(rutaImagenRecuperada);
-                byte[] buffer = new byte[1024];
-                while (is.read(buffer) > 0) {
-                    fos.write(buffer);
-                }
-                fos.close();
-                is.close();
-                System.out.println("Imagen recuperada y guardada correctamente.");
-                return rutaImagenRecuperada;
-            } else {
-                System.out.println("No se encontró ninguna imagen para el usuario especificado.");
-                return null;
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al consultar usuario: " + e);
-        }
-
-        return rutaImagenRecuperada;
-    }
-
+    */
 }

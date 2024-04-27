@@ -6,22 +6,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Tarjeta;
 
 public class ControladorTarjeta {
 
-    //metodo para crear una nueva tarjeta
+    // metodo para crear una nueva tarjeta
     public boolean crearTarjeta(Tarjeta objeto) {
         boolean respuesta = false;
+        String sql = "insert into tb_tarjeta (estadoTarjeta, tipoTarjeta, marcaTarjeta, numeroTarjeta)"
+        +" values(?, ?, ?, ?);";
         try {
 
             Connection cn = Conexion.conectar();
             try {
-                PreparedStatement consulta = cn.prepareStatement("",
+                PreparedStatement consulta = cn.prepareStatement(sql,
                         Statement.RETURN_GENERATED_KEYS);
-                consulta.setInt(1, objeto.getIdTarjeta());
+                consulta.setString(1, objeto.getEstadoTarjeta());
+                consulta.setString(2, objeto.getTipoTarjeta());
+                consulta.setString(3, objeto.getMarcaTarjeta());
+                consulta.setString(4, objeto.getNumeroTarjeta());
 
                 if (consulta.executeUpdate() > 0) {
                     respuesta = true;
@@ -42,8 +48,8 @@ public class ControladorTarjeta {
         }
         return respuesta;
     }
-
-    //metodo para guardar los datoss de una tarjeta
+/*
+    // metodo para guardar los datoss de una tarjeta
     public boolean guardar(Tarjeta objeto) {
         boolean respuesta = false;
         try {
@@ -73,43 +79,20 @@ public class ControladorTarjeta {
         }
         return respuesta;
     }
-
-    //metodo para actualizar una cuenta
-    public boolean actualizar(Tarjeta objeto, int idTarjeta) {
+*/
+    
+    // metodo para eliminar una tarjeta
+    public boolean eliminar(int idTarjeta) {
         boolean respuesta = false;
-        try {
-
-            Connection cn = Conexion.conectar();
-            String sql = "";
-            PreparedStatement consulta = null;
-            try {
-
-                consulta = cn.prepareStatement(sql);
-                consulta.setInt(1, objeto.getIdTarjeta());
-
-                if (consulta.executeUpdate() > 0) {
-                    respuesta = true;
-                }
-                cn.close();
-            } catch (SQLException e) {
-                System.out.println("Error al actualizar la tarjeta: " + e);
-            }
-            return respuesta;
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return respuesta;
-    }
-
-    //metodo para eliminar una tarjeta
-    public boolean eliminar(int idCuenta) {
-        boolean respuesta = false;
+        String sql = "delete * from tb_tarjeta where idTarjeta = '"+idTarjeta+"';";
+                
+                
         try {
 
             Connection cn = Conexion.conectar();
             try {
                 PreparedStatement consulta = cn.prepareStatement(
-                        "");
+                        sql);
                 consulta.executeUpdate();
 
                 if (consulta.executeUpdate() > 0) {
@@ -126,32 +109,33 @@ public class ControladorTarjeta {
         return respuesta;
     }
 
-    //metodo para crear el numero de tarjeta random
-    /**
-     * @return
-     */
-    public int crearNumeroTarjeta() {
-        int numCuenta = 0;
-        @SuppressWarnings("unused")
+    // metodo para crear el numero de tarjeta random
+    public String crearNumeroTarjeta() {
+        int numTarjeta = 0;
+        String numeroTarjeta = "";
+
         int longitud = 16;
+        Random rnd = new Random();
+        for (int i = 1; i <= longitud; i++) {
+            numTarjeta = rnd.nextInt();
+        }
+        if (numTarjeta < 0) {
+            numTarjeta = numTarjeta * (-1);
+        }
+        numeroTarjeta = Integer.toString(numTarjeta);
 
-        return numCuenta;
-
+        return numeroTarjeta;
     }
 
-    //metodo para comprobar que no existe el numero de tarjeta creado
-    public boolean existeNumeroCuenta(int numeroTarjeta) {
+    // metodo para comprobar que no existe el numero de tarjeta creado
+    public boolean existeNumeroTarjeta(String numeroTarjeta) throws ClassNotFoundException {
 
         boolean respuesta = false;
-        String sql = ""; 
+        String sql = "select * from tb_tarjeta where numeroTarjeta = '" + numeroTarjeta + "';";
         Statement st;
+        Connection cn = null;
         try {
-            Connection cn = null;
-            try {
-                cn = Conexion.conectar();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ControladorTarjeta.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            cn = Conexion.conectar();
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
@@ -163,33 +147,59 @@ public class ControladorTarjeta {
         return respuesta;
     }
 
-    public int obtenerIdTarjeta(int numeroTarjeta) {
+    public int obtenerIdTarjeta(String numeroTarjeta) {
+        String sql = "select idTarjeta where numeroTarjeta = '" + numeroTarjeta + "';";
+        int id = 0;
+        try {
+            Connection cn = Conexion.conectar();
 
-        return 0;
+            try {
+                Statement st = cn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while (rs.next()) {
+                    id = rs.getInt("idTarjeta");
+                }
+                cn.close();
+            } catch (SQLException e) {
+                System.out.println("Error al eliminar la tarjeta: " + e);
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControladorTarjeta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return id;
 
     }
 
-    //comprobar que la tarjeta está activa
-    public boolean comprobarEstado(int idTarjeta) {
-        boolean respuesta = false;
-        String sql = ""; 
-        Statement st;
+    // comprobar que la tarjeta está activa
+    public boolean comprobarEstado(int idTarjeta) throws SQLException {
+        String nombre = "";
+        boolean resp = false;
+        
+        String sql = "select nombre from tb_estadotarjeta inner join tb_tarjeta on tb_tarjeta.idEstadoTarjeta = tb_estadotarjeta.idEstado "
+                +
+                "where tb_tarjeta.idTarjeta  = '" + idTarjeta + "';";
+
         try {
-            Connection cn = null;
+            Connection cn = Conexion.conectar();
+
             try {
-                cn = Conexion.conectar();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ControladorTarjeta.class.getName()).log(Level.SEVERE, null, ex);
+                Statement st = cn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while (rs.next()) {
+                    nombre = rs.getString("nombre");
+                }
+                if(nombre == "Activa"){
+                    resp = true;
+                }
+                cn.close();
+            } catch (SQLException e) {
+                System.out.println("Error al eliminar la tarjeta: " + e);
             }
-            st = cn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                respuesta = true;
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al consultar usuario: " + e);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControladorTarjeta.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return respuesta;
+        return resp;
 
     }
 }

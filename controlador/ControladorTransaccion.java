@@ -196,6 +196,33 @@ public class ControladorTransaccion {
         return nombreEstado;
     }
 
+    // metodo para ver el estado de una transaccion
+    public boolean actualizarEstado(int idTransaccion, int idEstado) {
+        boolean resp = false;
+
+        String sql = "update table tb_transaccion set idEstado = '"+idEstado+"' where idTransaccion = '"
+                + idTransaccion + "';";
+        try {
+
+            Connection cn = Conexion.conectar();
+            try {
+                PreparedStatement consulta = cn.prepareStatement(sql,
+                        Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs = consulta.executeQuery();
+                while (rs.next()) {
+                    resp = true;
+                }
+
+                cn.close();
+            } catch (SQLException e) {
+                System.out.println("Error al comprobar el estado de la transaccion: " + e);
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControladorCuenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resp;
+    }
+
     // metodo para ver si hay errores en la transaccion
     public String obtenerError(int idTransaccion) {
         String nombreError = "";
@@ -454,12 +481,17 @@ public class ControladorTransaccion {
                         while (rsSaldo.next()) {
                             saldo = rsSaldo.getDouble("saldo");
                             numCuenta = rs.getString("numCuenta");
+                            
                         }
                         try {
-                            actualizarSaldo(saldo, objeto.getNumeroCuenta(), "entrada");
-                            actualizarSaldo(saldo, numCuenta, "salida");
+                            boolean actSE = actualizarSaldo(saldo, objeto.getNumeroCuenta(), "entrada");
+                            boolean actSS = actualizarSaldo(saldo, numCuenta, "salida");
+                            if(actSE == true && actSS == true){
+                                actualizarEstado(idTransaccion, 5);
+                            }
+                            
                         } catch (Exception e) {
-                            System.out.println("Error al actualizar los saldos: " + e);
+                            System.out.println("Error al actualizar los saldos y estado: " + e);
                         }
 
                         cn.close();
