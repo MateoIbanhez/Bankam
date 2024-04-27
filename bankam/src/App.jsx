@@ -4,6 +4,7 @@ import Header from './components/Header';
 import HomeSection from './components/HomeSection';
 import Login from './components/Login';
 import Transferencias from './components/Transferencias';
+import Soporte from './components/Soporte'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Header/>
         <Routes>
           <Route path="/transferencias" element={<Transferencias />} />
+          <Route path="/soporte" element={<Soporte />} />
           <Route path="/" element={<HomeSection />} />
         </Routes>
       </div>

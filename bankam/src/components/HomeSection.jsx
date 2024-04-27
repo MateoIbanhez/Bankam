@@ -29,8 +29,8 @@ const HomeSection = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-8 md:py-16 w-full max-w-screen-lg">
                 {/* Bloques descriptivos */}
                 <div className="p-6 rounded-lg text-center transition duration-300 ease-in-out transform hover:scale-105">
-                    <h3 className="text-xl font-semibold mb-2 text-green-400">Sencillo e Intuitivo</h3>
-                    <p className="text-lg text-green-400 mb-4">Interfaz sencilla e intuitiva, para todos los usuarios</p>
+                    <h3 className="text-xl font-semibold mb-2 text-white">Sencillo e Intuitivo</h3>
+                    <p className="text-lg text-white mb-4">Interfaz sencilla e intuitiva, para todos los usuarios</p>
                     <span className="text-4xl text-green-400" role="img" aria-label="Tick">✔️</span>
                 </div>
                 <div className="p-6 rounded-lg text-center transition duration-300 ease-in-out transform hover:scale-105">
