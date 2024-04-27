@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Transferencias from './components/Transferencias';
 import Soporte from './components/Soporte'
 import Contacto from './components/Contacto'
+import Perfil from './components/Perfil'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/soporte" element={<Soporte />} />
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/" element={<HomeSection />} />
+          <Route path="/perfil" element={<Perfil />} />
         </Routes>
       </div>
     </Router>
