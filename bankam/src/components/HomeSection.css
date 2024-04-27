@@ -1,0 +1,21 @@
+.contenedor-imagen {
+    position: relative;
+    max-width: 700px; /* Ancho máximo de la imagen */
+    overflow: hidden; /* Oculta el desbordamiento de la imagen cuando se aplique la transformación */
+  }
+  
+  .tarjeta {
+    width: 100%; /* Asegura que la imagen llene el contenedor */
+    height: auto;
+    transition: transform 0.3s ease-in-out; /* Transición suave de transformación */
+  }
+  
+  .contenedor-imagen:hover .tarjeta {
+    transform: scale(1.1); /* Aplica un zoom del 10% al hacer hover */
+  }
+  
+    .cliente:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease-in-out;
+      }
+  
