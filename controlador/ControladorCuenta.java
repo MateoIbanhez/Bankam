@@ -27,25 +27,22 @@ public class ControladorCuenta {
          */
         public static void handle(HttpExchange exchange){
             // Obtener los parámetros de la solicitud
-            String documento;
-            String pass;
+            int idUsuario;
+            Cuenta c;
             final String query = exchange.getRequestURI().getQuery();
             String[] params = query.split("&");
             for (String param : params) {
                 String[] keyValue = param.split("=");
                 String key = keyValue[0];
                 String value = keyValue[1];
-                if (key.equals("password")) {
+                if (key.equals("idUsuario")) {
                     // La contraseña se encuentra en el parámetro "password"
-                    pass = value;
+                    idUsuario = value;
                 }
-                if (key.equals("documento")) {
-                    // La contraseña se encuentra en el parámetro "password"
-                    documento = value;
-                }
+                
             }
             // Llamar al método loginUser con los parámetros obtenidos
-            int log = loginUser(documento, pass);
+            int log = abrirCuenta(c, idUsuario);
             
             // Responder a la solicitud
             String response = "Llamada al método loginUser() del controlador de usuario";
@@ -102,10 +99,10 @@ public class ControladorCuenta {
                 consulta.setInt(1, idUsuario);
                 consulta.setString(2, codPais);
                 consulta.setString(3, objeto.getCodControlPais());
-                consulta.setString(4, objeto.getEntidad());
+                consulta.setString(4, ent);
                 consulta.setString(5, objeto.getOficina());
                 consulta.setString(6, objeto.getCodControlCuenta());
-                consulta.setString(7, objeto.getNumeroCuenta());
+                consulta.setString(7, numC);
                 consulta.setDouble(8, objeto.getSaldo());
                 consulta.setString(8, objeto.getTipoMoneda());
                 consulta.setInt(8, objeto.getIdTarjeta());

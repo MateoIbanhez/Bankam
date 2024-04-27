@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 
 import javax.xml.ws.spi.http.HttpExchange;
 
+import com.sun.net.httpserver.HttpHandler;
+
 import modelo.Tarjeta;
 
 public class ControladorTarjeta {
@@ -26,25 +28,35 @@ public class ControladorTarjeta {
          */
         public static void handle(HttpExchange exchange){
             // Obtener los parámetros de la solicitud
-            String documento;
-            String pass;
+            String estadoTarjeta;
+            String tipoTarjeta;
+            String numeroTarjeta;
+            String marcaTarjeta;
             final String query = exchange.getRequestURI().getQuery();
             String[] params = query.split("&");
             for (String param : params) {
                 String[] keyValue = param.split("=");
                 String key = keyValue[0];
                 String value = keyValue[1];
-                if (key.equals("password")) {
+                if (key.equals("estadoTarjeta")) {
                     // La contraseña se encuentra en el parámetro "password"
-                    pass = value;
+                    estadoTarjeta = value;
                 }
-                if (key.equals("documento")) {
+                if (key.equals("tipoTarjeta")) {
                     // La contraseña se encuentra en el parámetro "password"
-                    documento = value;
+                    tipoTarjeta = value;
+                }
+                if (key.equals("numeroTarjeta")) {
+                    // La contraseña se encuentra en el parámetro "password"
+                    numeroTarjeta = value;
+                }
+                if (key.equals("marcaTarjeta")) {
+                    // La contraseña se encuentra en el parámetro "password"
+                    marcaTarjeta = value;
                 }
             }
             // Llamar al método loginUser con los parámetros obtenidos
-            int log = loginUser(documento, pass);
+            boolean res = crearTarjeta(estadoTarjeta, tipoTarjeta, marcaTarjeta, numeroTarjeta);
             
             // Responder a la solicitud
             String response = "Llamada al método loginUser() del controlador de usuario";
@@ -55,7 +67,7 @@ public class ControladorTarjeta {
         }
 
         public String toString() {
-            return "LoginHandler []";
+            return "TarjetaHandler []";
         }
 
         public void handle(com.sun.net.httpserver.HttpExchange arg0){
@@ -66,7 +78,7 @@ public class ControladorTarjeta {
 
 
     // metodo para crear una nueva tarjeta
-    public boolean crearTarjeta(Tarjeta objeto) {
+    public static boolean crearTarjeta(String estadoTarjeta, String tipoTarjeta, String marcaTarjeta, String numeroTarjeta) {
         boolean respuesta = false;
         String sql = "insert into tb_tarjeta (estadoTarjeta, tipoTarjeta, marcaTarjeta, numeroTarjeta)"
         +" values(?, ?, ?, ?);";
@@ -76,10 +88,10 @@ public class ControladorTarjeta {
             try {
                 PreparedStatement consulta = cn.prepareStatement(sql,
                         Statement.RETURN_GENERATED_KEYS);
-                consulta.setString(1, objeto.getEstadoTarjeta());
-                consulta.setString(2, objeto.getTipoTarjeta());
-                consulta.setString(3, objeto.getMarcaTarjeta());
-                consulta.setString(4, objeto.getNumeroTarjeta());
+                consulta.setString(1, estadoTarjeta);
+                consulta.setString(2, tipoTarjeta);
+                consulta.setString(3, marcaTarjeta);
+                consulta.setString(4, numeroTarjeta);
 
                 if (consulta.executeUpdate() > 0) {
                     respuesta = true;
