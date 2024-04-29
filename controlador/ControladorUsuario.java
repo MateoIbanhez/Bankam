@@ -522,7 +522,7 @@ public class ControladorUsuario {
      * @param idUsuario
      * @return
      */
-    public static boolean insertarImg(String rutaImg, int idUsuario)
+    public static boolean insertarImg(String rutaImg, int idUsuario, byte[] imagenBytes)
             throws FileNotFoundException {
         String rutaControlador = System.getProperty("user.dir");
         String rutaImagenes = Paths.get(rutaControlador, "img", "perfil").toString();

@@ -62,7 +62,7 @@ public class ControladorCuenta {
                 consulta.setString(6, objeto.getCodControlCuenta());
                 consulta.setString(7, numC);
                 consulta.setDouble(8, objeto.getSaldo());
-                consulta.setString(8, objeto.getTinseipoMoneda());
+                consulta.setString(8, objeto.getTipoMoneda());
                 consulta.setInt(8, objeto.getIdTarjeta());
 
                 if (consulta.executeUpdate() > 0) {
